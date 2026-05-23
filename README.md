@@ -56,6 +56,10 @@ Use automated tags in imports:
 - [ ] Add policy pages (shipping, returns, privacy, terms)
 - [ ] Test 1 full order from purchase to delivered tracking
 
+## Customer-Facing Guidelines
+
+**Important:** Do not display the actual cost of items to customers. Keep supplier pricing and procurement costs completely hidden from storefronts and customer communications. All cost data should remain **backend-only** in your admin/supplier systems.
+
 ## Reality Check
 
 You can make this **low-touch**, but not truly zero-touch forever. Customer disputes, supplier stock issues, and payment holds still require occasional review.
