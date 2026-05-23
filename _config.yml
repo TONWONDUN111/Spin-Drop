@@ -1,0 +1,25 @@
+# GitHub Pages Jekyll Configuration
+title: drop - Fidget Spinner Dropshipping Setup
+description: A practical setup for a low-touch fidget spinner and gadget dropshipping store
+author: TONWONDUN111
+github: https://github.com/TONWONDUN111/drop
+url: https://tonwondun111.github.io/drop
+baseurl: /drop
+
+# Theme
+theme: jekyll-theme-minimal
+
+# Settings
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+
+# Include
+include:
+  - _pages
+
+# Exclude
+exclude:
+  - .github
+  - .gitignore

@@ -1,0 +1,17 @@
+# Jekyll
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+.bundle
+vendor
+
+# OS
+.DS_Store
+.env
+.env.local
+
+# Build
+*.swp
+*.swo
+*~
