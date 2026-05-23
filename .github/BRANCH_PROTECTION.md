@@ -57,19 +57,25 @@ The `develop` branch requires the following protection rules:
 #### 3. **Deletion Prevention**
    - ✅ Prevent deletion of the branch
 
-## How to Configure Branch Protection
+## Automatic Configuration
 
-### Step 1: Access Repository Settings
+Branch protection rules are **automatically applied** to the `main` and `develop` branches when this configuration is merged into the repository. The `.github/workflows/apply-branch-protection.yml` workflow handles the setup automatically.
+
+### Manual Configuration (if needed)
+
+If you need to manually configure branch protection rules, follow these steps:
+
+#### Step 1: Access Repository Settings
 1. Navigate to your repository on GitHub
 2. Click **Settings** (gear icon)
 3. In the left sidebar, click **Branches**
 
-### Step 2: Add Branch Protection Rule
+#### Step 2: Add Branch Protection Rule
 1. Click **Add rule**
 2. Enter the branch name pattern: `main`
 3. Configure the following options:
 
-#### General Settings
+##### General Settings
 - [x] **Require a pull request before merging**
   - Require approvals: `1`
   - [x] Dismiss stale pull request approvals when new commits are pushed
@@ -85,7 +91,7 @@ The `develop` branch requires the following protection rules:
   - ⭕ Do not allow force pushes
 - [x] **Require conversation resolution before merging**
 
-### Step 3: Repeat for Other Protected Branches
+#### Step 3: Repeat for Other Protected Branches
 Repeat the process for the `develop` branch with the same or slightly relaxed rules as needed.
 
 ## Enforcement

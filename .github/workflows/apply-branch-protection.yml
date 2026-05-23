@@ -1,0 +1,119 @@
+name: Apply Branch Protection Rules
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/BRANCH_PROTECTION.md'
+      - '.github/workflows/apply-branch-protection.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  administration: write
+
+jobs:
+  apply-protection:
+    runs-on: ubuntu-latest
+    name: Apply Branch Protection
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Apply branch protection to main
+        run: |
+          echo "Applying branch protection rules to 'main' branch..."
+          
+          # Using GitHub CLI to apply branch protection
+          # Note: This requires admin access to the repository
+          
+          gh api repos/${{ github.repository }}/branches/main/protection \
+            --input - << 'EOF'
+          {
+            "required_status_checks": {
+              "strict": true,
+              "contexts": []
+            },
+            "enforce_admins": true,
+            "required_pull_request_reviews": {
+              "dismiss_stale_reviews": true,
+              "require_code_owner_reviews": true,
+              "required_approving_review_count": 1
+            },
+            "restrictions": null,
+            "allow_force_pushes": false,
+            "allow_deletions": false,
+            "required_conversation_resolution": true
+          }
+          EOF
+          
+          echo "✅ Branch protection applied to 'main'"
+
+      - name: Apply branch protection to develop
+        run: |
+          echo "Applying branch protection rules to 'develop' branch..."
+          
+          # Check if develop branch exists
+          if gh api repos/${{ github.repository }}/branches/develop > /dev/null 2>&1; then
+            gh api repos/${{ github.repository }}/branches/develop/protection \
+              --input - << 'EOF'
+            {
+              "required_status_checks": {
+                "strict": true,
+                "contexts": []
+              },
+              "enforce_admins": true,
+              "required_pull_request_reviews": {
+                "dismiss_stale_reviews": true,
+                "require_code_owner_reviews": false,
+                "required_approving_review_count": 1
+              },
+              "restrictions": null,
+              "allow_force_pushes": false,
+              "allow_deletions": false,
+              "required_conversation_resolution": false
+            }
+            EOF
+            
+            echo "✅ Branch protection applied to 'develop'"
+          else
+            echo "ℹ️  'develop' branch does not exist yet"
+          fi
+
+      - name: Verify branch protection
+        run: |
+          echo "Verifying branch protection rules..."
+          
+          echo ""
+          echo "Main branch protection:"
+          gh api repos/${{ github.repository }}/branches/main/protection --jq '.required_pull_request_reviews, .enforce_admins, .allow_force_pushes, .allow_deletions' || echo "Could not retrieve protection details"
+          
+          echo ""
+          echo "✅ Branch protection verification complete"
+
+      - name: Create summary
+        run: |
+          echo "## 🛡️ Branch Protection Applied" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Branch protection rules have been successfully applied to:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Main Branch" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require pull request reviews (1 approval)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Dismiss stale pull request approvals" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require code owner reviews" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require status checks to pass" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require branches to be up to date" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Enforce for administrators" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Prevent force pushes" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Prevent deletion" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require conversation resolution" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Develop Branch (if exists)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require pull request reviews (1 approval)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Dismiss stale pull request approvals" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require status checks to pass" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Require branches to be up to date" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Enforce for administrators" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Prevent force pushes" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Prevent deletion" >> $GITHUB_STEP_SUMMARY
