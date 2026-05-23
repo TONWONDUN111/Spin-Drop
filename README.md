@@ -43,7 +43,7 @@ Use automated tags in imports:
 
 ## Core Rules to Configure Once
 
-- **Pricing rule:** 2.2x product cost with minimum $9 margin.
+- **Pricing rule:** 1.8x product cost with minimum $5 margin (keep below market rates).
 - **Shipping rule:** prioritize suppliers with 7–12 day delivery.
 - **Quality rule:** suppliers with rating > 4.7 and > 300 orders.
 - **Refund rule:** auto-approve replacements for damaged items with photo proof.
