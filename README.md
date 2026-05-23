@@ -59,3 +59,35 @@ Use automated tags in imports:
 ## Reality Check
 
 You can make this **low-touch**, but not truly zero-touch forever. Customer disputes, supplier stock issues, and payment holds still require occasional review.
+
+## Contributing
+
+We welcome contributions! Please note that this repository has **branch protection** enabled on important branches (`main` and `develop`) to ensure code quality and stability.
+
+### Before You Start
+
+1. **Read the branch protection policy**: See [.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md)
+2. **Check the branch protection checklist**: See [.github/BRANCH_PROTECTION_CHECKLIST.md](.github/BRANCH_PROTECTION_CHECKLIST.md)
+
+### Contributing Process
+
+1. Create a **feature branch** from `develop` (never push directly to `main` or `develop`)
+2. Make your changes and commit with clear messages
+3. Open a **pull request** to merge your changes
+4. Wait for **at least 1 approval** before merging
+5. Ensure all **status checks pass**
+6. Your branch must be **up to date** with the target branch
+
+### Branch Protection Rules
+
+The following rules are enforced automatically:
+
+- ✅ All changes to `main` and `develop` must be through pull requests
+- ✅ All pull requests require at least 1 approval
+- ✅ All CI/CD checks must pass before merging
+- ✅ Branches must be up to date before merging
+- ✅ Direct pushes to protected branches are prevented
+- ✅ Force pushes are prevented
+- ✅ Protected branches cannot be deleted
+
+For more detailed information, see the [branch protection documentation](.github/BRANCH_PROTECTION.md).

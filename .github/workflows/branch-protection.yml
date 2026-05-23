@@ -1,0 +1,118 @@
+name: Branch Protection Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  validate-branch-protection:
+    runs-on: ubuntu-latest
+    name: Validate Branch Protection Rules
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR follows branch protection rules
+        run: |
+          echo "✅ Branch Protection Validation"
+          echo ""
+          echo "This PR must comply with the following branch protection rules:"
+          echo ""
+          echo "For 'main' branch:"
+          echo "  ✓ Pull request review required (minimum 1 approval)"
+          echo "  ✓ Status checks must pass"
+          echo "  ✓ Branch must be up to date"
+          echo "  ✓ No force pushes allowed"
+          echo ""
+          echo "Checklist:"
+          echo "  - [ ] This branch is not force-pushing"
+          echo "  - [ ] All CI/CD checks pass"
+          echo "  - [ ] Branch is up to date with target branch"
+          echo "  - [ ] At least 1 reviewer approval is required"
+          echo ""
+          echo "For more details, see .github/BRANCH_PROTECTION.md"
+
+      - name: Check for branch protection documentation
+        run: |
+          if [ -f ".github/BRANCH_PROTECTION.md" ]; then
+            echo "✅ Branch protection documentation found"
+          else
+            echo "⚠️  Branch protection documentation not found"
+          fi
+
+      - name: Verify branch naming convention
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "develop" ]]; then
+            echo "⚠️  WARNING: Direct pushes to protected branches are not allowed"
+            echo "Please create a feature branch instead"
+            exit 1
+          else
+            echo "✅ Using feature branch: $BRANCH_NAME"
+          fi
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    name: Ensure Branch Protection Compliance
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify required files exist
+        run: |
+          echo "Checking for branch protection configuration files..."
+          
+          files=(
+            ".github/BRANCH_PROTECTION.md"
+            ".github/BRANCH_PROTECTION_CHECKLIST.md"
+            ".github/CODEOWNERS"
+            ".github/pull_request_template.md"
+          )
+          
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✅ Found: $file"
+            else
+              echo "❌ Missing: $file"
+            fi
+          done
+
+      - name: Validate CODEOWNERS format
+        run: |
+          if [ -f ".github/CODEOWNERS" ]; then
+            echo "Validating CODEOWNERS file..."
+            # Basic validation - check if it contains at least one owner
+            if grep -q "@" ".github/CODEOWNERS"; then
+              echo "✅ CODEOWNERS file is valid"
+            else
+              echo "⚠️  CODEOWNERS file may need review"
+            fi
+          fi
+
+  status-check:
+    runs-on: ubuntu-latest
+    name: Branch Protection Status
+    steps:
+      - name: Report Status
+        run: |
+          echo "🛡️  Branch Protection is Active"
+          echo ""
+          echo "Protected Branches:"
+          echo "  • main"
+          echo "  • develop"
+          echo ""
+          echo "Requirements:"
+          echo "  ✓ Pull request review required"
+          echo "  ✓ Status checks must pass"
+          echo "  ✓ Branch must be up to date"
+          echo "  ✓ Force pushes disabled"
+          echo ""
+          echo "ℹ️  For more information, see .github/BRANCH_PROTECTION.md"

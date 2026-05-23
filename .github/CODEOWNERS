@@ -1,0 +1,13 @@
+# CODEOWNERS file
+# This file is used to automatically request reviews from specific users/teams
+# when changes are made to the repository.
+# 
+# For more information, see:
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repository
+* @TONWONDUN111
+
+# Documentation
+/README.md @TONWONDUN111
+/.github/ @TONWONDUN111
