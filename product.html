@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product — Soak Ops</title>
+<title>Product — Spin Drop</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  :root { --lime:#C8FF00; --pink:#E5007D; --dark:#0D0D1A; --white:#FFF; --gray:#6B7280; --light:#F4F4F5; }
+  :root { --gold:#F59E0B; --purple:#7C3AED; --dark:#0D0D1A; --white:#FFF; --gray:#6B7280; --light:#F4F4F5; }
   html { scroll-behavior: smooth; }
   body { font-family:'Inter',sans-serif; background:var(--white); color:var(--dark); }
 
-  .blob-tr { position:fixed; top:-140px; right:-140px; width:600px; height:600px; background:radial-gradient(circle,rgba(200,255,0,.12) 0%,transparent 65%); pointer-events:none; z-index:0; }
+  .blob-tr { position:fixed; top:-140px; right:-140px; width:600px; height:600px; background:radial-gradient(circle,rgba(124,58,237,.12) 0%,transparent 65%); pointer-events:none; z-index:0; }
   .blob-bl { position:fixed; bottom:-100px; left:-100px; width:480px; height:480px; background:radial-gradient(circle,rgba(150,220,255,.18) 0%,transparent 65%); pointer-events:none; z-index:0; }
 
   /* NAV */
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:16px 52px; background:rgba(255,255,255,.94); backdrop-filter:blur(16px); border-bottom:1px solid rgba(0,0,0,.07); }
   .logo { font-size:20px; font-weight:900; letter-spacing:-.04em; color:var(--dark); text-decoration:none; display:flex; align-items:center; gap:8px; }
-  .logo .ops { color:var(--lime); text-shadow:0 0 16px rgba(200,255,0,.5); }
+  .logo .drop { color:var(--gold); text-shadow:0 0 16px rgba(124,58,237,.5); }
   .nav-right { display:flex; align-items:center; gap:20px; }
   .nav-back { font-size:12px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--dark); text-decoration:none; opacity:.6; transition:opacity .2s; }
   .nav-back:hover { opacity:1; }
   .cart-btn { position:relative; padding:11px 20px; background:var(--dark); color:var(--white); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; border:none; cursor:pointer; transition:opacity .2s; }
   .cart-btn:hover { opacity:.8; }
-  .cart-count { position:absolute; top:-6px; right:-6px; background:var(--pink); color:var(--white); font-size:10px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .cart-count { position:absolute; top:-6px; right:-6px; background:var(--purple); color:var(--white); font-size:10px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
   /* BREADCRUMB */
   .breadcrumb { padding:100px 52px 0; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
@@ -41,10 +41,10 @@
   .main-image { width:100%; aspect-ratio:1; background:linear-gradient(145deg,#e0efff,#c8e0f8); display:flex; align-items:center; justify-content:center; overflow:hidden; border:1.5px solid rgba(0,0,0,.08); position:relative; }
   .main-image img { width:100%; height:100%; object-fit:cover; }
   .img-badge { position:absolute; top:16px; left:16px; padding:6px 12px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
-  .img-badge.hot  { background:var(--pink); color:var(--white); }
-  .img-badge.lime { background:var(--lime); color:var(--dark); border:1.5px solid var(--dark); }
+  .img-badge.hot  { background:var(--purple); color:var(--white); }
+  .img-badge.lime { background:var(--gold); color:var(--dark); border:1.5px solid var(--dark); }
   .img-badge.dark { background:var(--dark); color:var(--white); }
-  .delivery-strip { margin-top:16px; padding:14px 18px; background:var(--light); border-left:3px solid var(--lime); display:flex; align-items:center; gap:12px; }
+  .delivery-strip { margin-top:16px; padding:14px 18px; background:var(--light); border-left:3px solid var(--gold); display:flex; align-items:center; gap:12px; }
   .delivery-strip svg { flex-shrink:0; }
   .delivery-strip p { font-size:13px; font-weight:600; color:var(--dark); }
   .delivery-strip span { font-weight:400; color:var(--gray); }
@@ -53,7 +53,7 @@
   .product-info {}
   .cat-badge { display:inline-block; padding:5px 12px; background:var(--light); font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray); margin-bottom:18px; }
   .product-name { font-size:clamp(28px,4vw,46px); font-weight:900; letter-spacing:-.04em; text-transform:uppercase; line-height:.95; margin-bottom:14px; }
-  .product-name .k { color:var(--pink); }
+  .product-name .k { color:var(--purple); }
   .social-proof { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
   .stars { display:flex; gap:3px; }
   .star { width:14px; height:14px; }
@@ -73,7 +73,7 @@
   .features-title { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray); margin-bottom:12px; }
   .feature-list { display:flex; flex-direction:column; gap:8px; }
   .feature-item { display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--dark); }
-  .feature-icon { width:20px; height:20px; background:var(--lime); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .feature-icon { width:20px; height:20px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 
   /* QTY + CTA */
   .qty-row { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
@@ -84,8 +84,8 @@
   .qty-num { width:40px; text-align:center; font-size:15px; font-weight:800; border:none; outline:none; font-family:inherit; }
 
   .btn-cart { width:100%; padding:17px; background:var(--dark); color:var(--white); font-family:inherit; font-size:14px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; border:2px solid var(--dark); cursor:pointer; transition:all .2s; margin-bottom:10px; }
-  .btn-cart:hover { background:var(--pink); border-color:var(--pink); }
-  .btn-cart.added { background:var(--lime); color:var(--dark); border-color:var(--lime); }
+  .btn-cart:hover { background:var(--purple); border-color:var(--purple); }
+  .btn-cart.added { background:var(--gold); color:var(--dark); border-color:var(--gold); }
 
   .btn-buy-now { width:100%; padding:17px; background:transparent; color:var(--dark); font-family:inherit; font-size:14px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; border:2px solid rgba(0,0,0,.2); cursor:pointer; transition:all .2s; margin-bottom:24px; text-decoration:none; display:block; text-align:center; }
   .btn-buy-now:hover { border-color:var(--dark); background:var(--light); }
@@ -96,31 +96,31 @@
   /* RELATED */
   .related { padding:80px 52px; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
   .related-title { font-size:clamp(28px,3.5vw,40px); font-weight:900; letter-spacing:-.04em; text-transform:uppercase; margin-bottom:36px; }
-  .related-title span { color:var(--pink); }
+  .related-title span { color:var(--purple); }
   .related-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
   .card { border:1.5px solid rgba(0,0,0,.09); overflow:hidden; display:block; text-decoration:none; color:inherit; transition:transform .22s, box-shadow .22s; }
   .card:hover { transform:translateY(-4px); box-shadow:0 14px 40px rgba(0,0,0,.1); }
   .card-img { height:180px; background:#eef6ff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
   .card-img img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
   .card:hover .card-img img { transform:scale(1.07); }
-  .card-tag { position:absolute; top:10px; left:10px; padding:4px 9px; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--lime); color:var(--dark); border:1px solid var(--dark); }
-  .card-tag.hot  { background:var(--pink); color:var(--white); border-color:var(--pink); }
+  .card-tag { position:absolute; top:10px; left:10px; padding:4px 9px; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--gold); color:var(--dark); border:1px solid var(--dark); }
+  .card-tag.hot  { background:var(--purple); color:var(--white); border-color:var(--purple); }
   .card-tag.dark { background:var(--dark); color:var(--white); border-color:var(--dark); }
   .card-body { padding:14px 16px 16px; }
   .card-name { font-size:13px; font-weight:900; letter-spacing:-.02em; text-transform:uppercase; line-height:1.2; margin-bottom:10px; }
   .card-foot { display:flex; justify-content:space-between; align-items:center; }
   .card-price { font-size:17px; font-weight:900; letter-spacing:-.02em; }
   .btn-view { padding:7px 14px; background:var(--dark); color:var(--white); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border:none; cursor:pointer; text-decoration:none; transition:background .2s; }
-  .btn-view:hover { background:var(--pink); }
+  .btn-view:hover { background:var(--purple); }
 
   /* FOOTER */
   footer { padding:28px 52px; border-top:1px solid rgba(0,0,0,.09); display:flex; justify-content:space-between; align-items:center; }
   .foot-logo { font-size:17px; font-weight:900; letter-spacing:-.03em; color:var(--dark); display:flex; align-items:center; gap:6px; }
-  .foot-logo span { color:var(--lime); }
+  .foot-logo span { color:var(--gold); }
   .foot-copy { font-size:11px; color:var(--gray); }
 
   /* CART TOAST */
-  .toast { position:fixed; bottom:28px; right:28px; z-index:999; padding:16px 24px; background:var(--dark); color:var(--white); font-size:13px; font-weight:700; letter-spacing:.04em; border-left:4px solid var(--lime); transform:translateY(100px); opacity:0; transition:all .35s cubic-bezier(.34,1.56,.64,1); }
+  .toast { position:fixed; bottom:28px; right:28px; z-index:999; padding:16px 24px; background:var(--dark); color:var(--white); font-size:13px; font-weight:700; letter-spacing:.04em; border-left:4px solid var(--gold); transform:translateY(100px); opacity:0; transition:all .35s cubic-bezier(.34,1.56,.64,1); }
   .toast.show { transform:translateY(0); opacity:1; }
 
   /* MOBILE */
@@ -149,7 +149,7 @@
       <line x1="8" y1="14" x2="11" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="17" y1="14" x2="20" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
-    SOAK<span class="ops"> OPS</span>
+    SPIN<span class="drop"> DROP</span>
   </a>
   <div class="nav-right">
     <a href="index.html" class="nav-back">← All Guns</a>
@@ -189,9 +189,9 @@
       <path d="M14 3C14 3 6 11 6 16.5C6 20.6 9.6 24 14 24C18.4 24 22 20.6 22 16.5C22 11 14 3 14 3Z" fill="#C8FF00" stroke="#0D0D1A" stroke-width="1.5"/>
       <circle cx="14" cy="14" r="2.5" fill="#0D0D1A"/>
     </svg>
-    SOAK <span>OPS</span>
+    SPIN <span>DROP</span>
   </div>
-  <div class="foot-copy">© 2026 Soak Ops. All rights reserved.</div>
+  <div class="foot-copy">© 2026 Spin Drop. All rights reserved.</div>
 </footer>
 
 <!-- TOAST -->
@@ -200,8 +200,8 @@
 <script src="products.js"></script>
 <script>
 // ── Cart helpers ──────────────────────────────────────────────────────────────
-function getCart() { return JSON.parse(localStorage.getItem('soakops-cart') || '[]'); }
-function saveCart(c) { localStorage.setItem('soakops-cart', JSON.stringify(c)); }
+function getCart() { return JSON.parse(localStorage.getItem('spindrop-cart') || '[]'); }
+function saveCart(c) { localStorage.setItem('spindrop-cart', JSON.stringify(c)); }
 function cartCount() { return getCart().reduce((s,i) => s+i.qty, 0); }
 function updateNavCount() {
   const el = document.getElementById('nav-cart-count');
@@ -244,7 +244,7 @@ const p  = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
 document.getElementById('bc-cat').textContent  = p.cat.charAt(0).toUpperCase() + p.cat.slice(1);
 document.getElementById('bc-cat').href         = `index.html`;
 document.getElementById('bc-name').textContent = p.name;
-document.title = p.name + ' — Soak Ops';
+document.title = p.name + ' — Spin Drop';
 
 const tagClass = p.tagType === 'hot' ? 'hot' : p.tagType === 'dark' ? 'dark' : 'lime';
 const nameHtml = p.name.replace(/(\b\w+\b)$/, '<span class="k">$1</span>');
