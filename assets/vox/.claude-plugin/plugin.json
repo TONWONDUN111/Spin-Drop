@@ -1,0 +1,9 @@
+{
+  "name": "vox",
+  "version": "0.2.0",
+  "description": "Give your AI a voice. Speaks Claude's replies aloud — free offline voices by default, with one-command upgrade to lifelike ElevenLabs / OpenAI voices.",
+  "author": { "name": "Vox" },
+  "keywords": ["voice", "tts", "text-to-speech", "accessibility", "elevenlabs", "audio"],
+  "hooks": "./hooks/hooks.json",
+  "commands": "./commands"
+}

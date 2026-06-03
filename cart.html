@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart — Soak Ops</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --lime: #C8FF00;
+    --pink: #E5007D;
+    --dark: #0D0D1A;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --light: #F4F4F5;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+  .blob-tr { position: fixed; top: -140px; right: -140px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(200,255,0,.15) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+  .blob-bl { position: fixed; bottom: -100px; left: -100px; width: 560px; height: 560px; background: radial-gradient(circle, rgba(150,220,255,.2) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 52px;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,.07);
+  }
+  .logo {
+    font-size: 20px; font-weight: 900; letter-spacing: -.04em;
+    color: var(--dark); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-icon { width: 26px; height: 26px; }
+  .logo span.ops { color: var(--lime); text-shadow: 0 0 16px rgba(200,255,0,.5); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--dark); text-decoration: none; transition: opacity .2s; }
+  .nav-links a:hover { opacity: .5; }
+  .cart-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--pink); color: #fff; font-size: 10px; font-weight: 800;
+    width: 18px; height: 18px; border-radius: 50%; margin-left: 4px; vertical-align: middle;
+  }
+  .btn-nav { padding: 11px 24px; background: var(--dark); color: var(--white); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: opacity .2s; }
+  .btn-nav:hover { opacity: .8; }
+
+  /* PAGE */
+  .page-wrap {
+    max-width: 1100px; margin: 0 auto; padding: 120px 24px 80px;
+    position: relative; z-index: 1;
+  }
+  .page-title {
+    font-size: clamp(32px, 5vw, 56px); font-weight: 900; letter-spacing: -.03em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .page-title .k { color: var(--pink); }
+  .page-subtitle { font-size: 14px; color: var(--gray); margin-bottom: 48px; }
+
+  /* CART LAYOUT */
+  .cart-layout { display: grid; grid-template-columns: 1fr 360px; gap: 40px; align-items: start; }
+  @media (max-width: 800px) { .cart-layout { grid-template-columns: 1fr; } }
+
+  /* CART ITEMS */
+  .cart-items { display: flex; flex-direction: column; gap: 16px; }
+
+  .cart-item {
+    display: grid; grid-template-columns: 80px 1fr auto;
+    gap: 16px; align-items: center;
+    padding: 20px; border: 1.5px solid rgba(0,0,0,.08);
+    background: var(--white);
+    transition: border-color .2s;
+  }
+  .cart-item:hover { border-color: var(--lime); }
+  .cart-item-img {
+    width: 80px; height: 80px; object-fit: cover; display: block;
+    background: var(--light);
+  }
+  .cart-item-name {
+    font-size: 14px; font-weight: 800; letter-spacing: -.01em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .cart-item-name .k { color: var(--pink); }
+  .cart-item-price { font-size: 16px; font-weight: 900; color: var(--dark); }
+
+  .qty-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .qty-btn {
+    width: 30px; height: 30px; border: 1.5px solid var(--dark); background: transparent;
+    font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .2s, color .2s;
+  }
+  .qty-btn:hover { background: var(--dark); color: var(--white); }
+  .qty-val { font-size: 14px; font-weight: 800; min-width: 24px; text-align: center; }
+
+  .remove-btn {
+    background: none; border: none; cursor: pointer; color: var(--gray);
+    font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    padding: 6px 0; transition: color .2s; align-self: start;
+  }
+  .remove-btn:hover { color: var(--pink); }
+
+  /* EMPTY STATE */
+  .empty-cart {
+    text-align: center; padding: 80px 24px;
+    border: 2px dashed rgba(0,0,0,.1);
+  }
+  .empty-cart .big { font-size: 48px; margin-bottom: 16px; }
+  .empty-cart h2 { font-size: 22px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+  .empty-cart p { font-size: 14px; color: var(--gray); margin-bottom: 28px; }
+  .btn-shop {
+    display: inline-block; padding: 14px 36px;
+    background: var(--lime); color: var(--dark);
+    font-size: 13px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    text-decoration: none; transition: opacity .2s;
+  }
+  .btn-shop:hover { opacity: .85; }
+
+  /* ORDER SUMMARY */
+  .order-summary {
+    padding: 28px; border: 1.5px solid rgba(0,0,0,.1);
+    position: sticky; top: 90px;
+  }
+  .summary-title { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 20px; }
+
+  .summary-line { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; }
+  .summary-line.total { font-weight: 900; font-size: 18px; padding-top: 16px; border-top: 1.5px solid rgba(0,0,0,.1); margin-top: 4px; }
+  .summary-line span:first-child { color: var(--gray); font-weight: 600; }
+  .summary-line.total span:first-child { color: var(--dark); }
+
+  .free-ship { font-size: 12px; font-weight: 700; color: var(--lime); background: var(--dark); padding: 3px 8px; letter-spacing: .05em; }
+
+  .btn-checkout {
+    display: block; width: 100%; margin-top: 20px;
+    padding: 16px; background: var(--lime); color: var(--dark);
+    font-size: 13px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase;
+    border: none; cursor: pointer; text-align: center; text-decoration: none;
+    transition: opacity .2s;
+  }
+  .btn-checkout:hover { opacity: .85; }
+
+  .trust-row { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+  .trust-item { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--gray); }
+  .trust-icon { font-size: 16px; }
+
+  /* CONTINUE SHOPPING */
+  .continue-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--dark); text-decoration: none; margin-top: 20px;
+    transition: opacity .2s;
+  }
+  .continue-link:hover { opacity: .5; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--dark); color: var(--lime); font-size: 13px; font-weight: 800;
+    letter-spacing: .06em; padding: 12px 28px; z-index: 999; pointer-events: none;
+    transition: transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 32px 24px;
+    font-size: 12px; color: var(--gray);
+    border-top: 1px solid rgba(0,0,0,.07); position: relative; z-index: 1;
+  }
+</style>
+</head>
+<body>
+<div class="blob-tr"></div>
+<div class="blob-bl"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="index.html">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="14" fill="#0D0D1A"/>
+      <path d="M16 4 C10 10, 8 14, 16 28 C24 14, 22 10, 16 4Z" fill="#C8FF00"/>
+      <circle cx="16" cy="16" r="3" fill="#E5007D"/>
+      <line x1="16" y1="7" x2="16" y2="25" stroke="#fff" stroke-width="1" stroke-dasharray="2 2" opacity=".4"/>
+      <line x1="7" y1="16" x2="25" y2="16" stroke="#fff" stroke-width="1" stroke-dasharray="2 2" opacity=".4"/>
+    </svg>
+    SOAK <span class="ops">OPS</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Shop</a></li>
+    <li><a href="index.html#categories">Categories</a></li>
+    <li><a href="cart.html">Cart <span class="cart-badge" id="nav-count">0</span></a></li>
+  </ul>
+  <a href="index.html" class="btn-nav">Keep Shopping</a>
+</nav>
+
+<!-- PAGE -->
+<div class="page-wrap">
+  <h1 class="page-title">YOUR <span class="k">CART</span></h1>
+  <p class="page-subtitle" id="item-count">Loading...</p>
+
+  <div class="cart-layout" id="cart-layout">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  © 2025 Soak Ops &nbsp;·&nbsp; Ships 7–12 days to U.S. &nbsp;·&nbsp; Free tracking on every order
+</footer>
+
+<script src="products.js"></script>
+<script>
+const CDN_URL = '';
+
+const SHOPIFY_DOMAIN = '0u1gd1-9z.myshopify.com';
+// Maps local product id -> Shopify variant id. Empty until products are imported;
+// regenerate with build-variant-map.js once the store is live, then paste here.
+const VARIANT_MAP = {
+0: 46995952697519,
+  1: 46995951026351,
+  2: 46995950862511,
+  3: 46995950731439,
+  4: 46995950600367,
+  5: 46995949977775,
+  6: 46995949813935,
+  7: 46995949748399,
+  8: 46995949551791,
+  9: 46995949453487,
+  10: 46995949355183,
+  11: 46995949060271,
+  12: 46995948929199,
+  13: 46995948798127,
+  14: 46995948667055,
+  15: 46995948470447,
+  16: 46995948404911,
+  17: 46995948175535,
+  18: 46995947978927,
+  19: 46995947913391,
+  20: 46995947847855,
+  21: 46995947585711,
+  22: 46995947389103,
+  23: 46995947323567,
+  24: 46995947225263,
+  25: 46995947061423,
+  26: 46995946832047,
+  27: 46995946668207,
+  28: 46995946537135,
+  29: 46995946438831,
+  30: 46995946307759,
+  31: 46995946078383,
+  32: 46995945947311,
+  33: 46995945849007,
+  34: 46995945521327,
+  35: 46995945390255,
+  36: 46995945324719,
+  37: 46995945128111,
+  38: 46995944603823,
+  39: 46995944341679,
+  40: 46995943850159,
+  41: 46995943653551,
+  42: 46995943588015,
+  43: 46995943391407,
+  44: 46995943227567,
+  45: 46995942932655,
+  46: 46995942834351,
+  47: 46995942670511,
+  48: 46995942604975,
+  49: 46995942441135,
+  50: 46995942310063,
+  51: 46995942047919,
+  52: 46995941916847,
+  53: 46995941687471,
+  54: 46995941523631,
+  55: 46995941327023,
+  56: 46995941163183,
+  57: 46995940966575,
+  58: 46995940802735,
+  59: 46995940671663,
+  60: 46995940442287,
+  61: 46995940114607,
+  62: 46995939917999,
+  63: 46995939754159,
+  64: 46995939623087,
+  65: 46995939229871,
+  66: 46995939066031,
+  67: 46995939033263,
+  68: 46995938902191,
+  69: 46995938672815,
+  70: 46995938541743,
+  71: 46995938377903,
+  72: 46995938214063,
+  73: 46995938115759,
+  74: 46995938017455,
+  75: 46995937984687,
+  76: 46995937755311,
+  77: 46995937525935,
+  78: 46995937427631,
+  79: 46995937329327,
+  80: 46995937067183,
+  81: 46995936608431,
+  82: 46995936477359,
+  83: 46995936379055,
+  84: 46995936116911,
+  85: 46995936051375,
+  86: 46995935723695,
+  87: 46995935592623,
+  88: 46995935461551,
+  89: 46995935297711,
+  90: 46995935232175,
+  91: 46995935035567,
+  92: 46995934838959,
+  93: 46995934740655,
+  94: 46995934511279,
+  95: 46995934412975,
+  96: 46988645597359,
+  97: 46988645367983,
+  98: 46988645335215,
+  99: 46988645269679,
+  100: 46988645204143,
+  101: 46988645073071,
+  102: 46988644909231,
+  103: 46988644843695,
+  104: 46988644614319,
+  105: 46988644516015,
+  106: 46988644253871,
+  107: 46988644057263,
+  108: 46988644024495,
+  109: 46988643958959,
+  110: 46988643795119,
+  111: 46988643664047,
+  112: 46988643434671,
+  113: 46988643401903,
+  114: 46988643106991,
+  115: 46988642877615,
+  116: 46988642713775,
+  117: 46988642549935,
+  118: 46988642418863,
+  119: 46988642189487,
+  120: 46988642091183,
+  121: 46988641861807,
+  122: 46988641829039,
+  123: 46988641697967,
+  124: 46988641566895,
+  125: 46988641403055,
+  126: 46988641271983,
+  127: 46988641075375,
+  128: 46988640845999,
+  129: 46988640387247,
+  130: 46988640223407,
+  131: 46988639961263,
+  132: 46988639862959,
+  133: 46988639502511,
+  134: 46988639371439,
+  135: 46988639240367,
+  136: 46988639109295,
+  137: 46988639043759,
+  138: 46988638716079,
+  139: 46988638585007,
+  140: 46988638486703,
+  141: 46988638355631,
+  142: 46988638290095,
+  143: 46988638060719,
+  144: 46988637864111,
+  145: 46988637798575,
+  146: 46988637569199,
+  147: 46988637438127,
+  148: 46988637307055,
+  149: 46988637241519,
+  150: 46988637077679,
+  151: 46988636913839,
+  152: 46988636717231,
+  153: 46988636586159,
+  154: 46988636553391,
+  155: 46988636422319,
+  156: 46988636192943,
+  157: 46988636127407,
+  158: 46988636061871,
+  159: 46988635898031,
+  160: 46988635734191,
+  161: 46988635406511,
+  162: 46988635242671,
+  163: 46988635046063,
+  164: 46988634882223,
+  165: 46988634783919,
+  166: 46988634652847,
+  167: 46988634456239,
+  168: 46988634128559,
+  169: 46988633997487,
+  170: 46988633768111,
+  171: 46988633473199,
+  172: 46988633309359,
+  173: 46988633145519,
+  174: 46988633014447,
+  175: 46988632850607,
+  176: 46988632785071,
+  177: 46988632522927,
+  178: 46988632162479,
+  179: 46988632031407,
+  180: 46988631900335,
+  181: 46988631802031,
+  182: 46988631703727,
+  183: 46988631343279,
+  184: 46988631277743,
+  185: 46988631179439,
+  186: 46988631048367,
+  187: 46988630818991,
+  188: 46988630753455,
+  189: 46988630556847,
+  190: 46988630425775,
+  191: 46988630229167,
+  192: 46988630130863,
+  193: 46988629999791,
+  194: 46988629967023,
+  195: 46983932412079,
+  196: 46983932379311,
+  197: 46983932117167,
+  198: 46983931789487,
+  199: 46983931723951,
+  200: 46983931265199,
+  201: 46983931166895,
+  202: 46983931035823,
+  203: 46983930642607,
+  204: 46983930445999,
+  205: 46983930249391,
+  206: 46983930151087,
+  207: 46983930020015,
+  208: 46983929888943,
+  209: 46983929626799,
+  210: 46983929594031,
+  211: 46983929364655,
+  212: 46983929331887,
+  213: 46983929200815,
+  214: 46983924154543,
+  215: 46983751008431,
+  216: 46979186032815,
+};
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getCart() {
+  try {
+    const raw = JSON.parse(localStorage.getItem('soakops-cart') || '[]');
+    return Array.isArray(raw) ? raw.map(i => ({
+      id:    parseInt(i.id,   10),
+      name:  String(i.name  || '').slice(0, 120),
+      price: parseFloat(i.price) || 0,
+      img:   String(i.img   || ''),
+      qty:   Math.max(1, parseInt(i.qty, 10) || 1),
+    })).filter(i => !isNaN(i.id)) : [];
+  } catch { return []; }
+}
+function saveCart(c) { localStorage.setItem('soakops-cart', JSON.stringify(c)); }
+
+function updateNavCount() {
+  const cart = getCart();
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('nav-count').textContent = total;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function changeQty(id, delta) {
+  const cart = getCart();
+  const idx = cart.findIndex(i => i.id === id);
+  if (idx < 0) return;
+  cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+  saveCart(cart);
+  render();
+}
+
+function removeItem(id) {
+  const cart = getCart().filter(i => i.id !== id);
+  saveCart(cart);
+  showToast('Removed from cart');
+  render();
+}
+
+function nameHtml(name) {
+  const safe = escHtml(name);
+  return safe.replace(/(\b\w+\b)$/, '<span class="k">$1</span>');
+}
+
+function render() {
+  const cart = getCart();
+  updateNavCount();
+
+  const layout = document.getElementById('cart-layout');
+  const countEl = document.getElementById('item-count');
+
+  if (cart.length === 0) {
+    countEl.textContent = '0 items';
+    layout.innerHTML = `
+      <div class="empty-cart" style="grid-column:1/-1">
+        <div class="big">💧</div>
+        <h2>Your cart is empty</h2>
+        <p>Pick a water gun and get ready to soak.</p>
+        <a class="btn-shop" href="index.html">Shop All Guns →</a>
+      </div>`;
+    return;
+  }
+
+  const itemCount = cart.reduce((s, i) => s + i.qty, 0);
+  countEl.textContent = itemCount + ' item' + (itemCount !== 1 ? 's' : '');
+
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping = 0;
+  const total = subtotal + shipping;
+
+  const itemsHtml = cart.map(item => {
+    const prod = PRODUCTS.find(p => p.id === item.id);
+    const imgSrc = prod ? CDN_URL + prod.img : '';
+    const ready = VARIANT_MAP[item.id] != null;
+    const pendingBadge = ready ? '' : '<span style="display:inline-block;margin-top:6px;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:#FFF3CD;color:#856404;border:1px solid #FFD700;">Coming Soon — Not Yet Available for Checkout</span>';
+    return `
+    <div class="cart-item" style="${ready ? '' : 'opacity:.7'}">
+      <a href="product.html?id=${item.id}">
+        <img class="cart-item-img" src="${imgSrc}" alt="${escHtml(item.name)}" onerror="this.style.display='none'"/>
+      </a>
+      <div>
+        <div class="cart-item-name">${nameHtml(item.name)}</div>
+        <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+        ${pendingBadge}
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+        </div>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+    </div>`;
+  }).join('');
+
+  layout.innerHTML = `
+    <div>
+      <div class="cart-items">${itemsHtml}</div>
+      <a class="continue-link" href="index.html">← Continue Shopping</a>
+    </div>
+    <div class="order-summary">
+      <div class="summary-title">Order Summary</div>
+      <div class="summary-line"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+      <div class="summary-line"><span>Shipping</span><span class="free-ship">FREE</span></div>
+      <div class="summary-line"><span>Delivery</span><span>7–12 days U.S.</span></div>
+      <div class="summary-line total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+      ${cart.some(i => VARIANT_MAP[i.id] == null) ? `<div style="font-size:11px;font-weight:600;color:#856404;background:#FFF3CD;border:1px solid #FFD700;padding:8px 12px;margin-bottom:12px;letter-spacing:.04em;">⚠ Some items aren't live yet and will be skipped at checkout.</div>` : ''}
+      <button class="btn-checkout" onclick="checkout()">Checkout →</button>
+      <div class="trust-row">
+        <div class="trust-item"><span class="trust-icon">🔒</span> Secure checkout</div>
+        <div class="trust-item"><span class="trust-icon">📦</span> Free tracking on every order</div>
+        <div class="trust-item"><span class="trust-icon">↩️</span> 30-day easy returns</div>
+      </div>
+    </div>`;
+}
+
+function checkout() {
+  const cart = getCart();
+  if (!cart.length) return;
+
+  const readyItems   = cart.filter(i => VARIANT_MAP[i.id] != null);
+  const pendingItems = cart.filter(i => VARIANT_MAP[i.id] == null);
+
+  if (!readyItems.length) {
+    showToast('These items aren\'t live on the store yet — check back soon!');
+    return;
+  }
+
+  if (pendingItems.length) {
+    const names = pendingItems.map(i => i.name).join(', ');
+    const ok = confirm(`${pendingItems.length} item(s) aren't live yet and won't be included in this order:\n\n${names}\n\nContinue with the remaining ${readyItems.length} item(s)?`);
+    if (!ok) return;
+  }
+
+  const lineItems = readyItems.map(i => `${VARIANT_MAP[i.id]}:${i.qty}`);
+  window.location.href = `https://${SHOPIFY_DOMAIN}/cart/${lineItems.join(',')}?skip_shop_pay=true`;
+}
+
+// Handle "Buy Now" — ?buynow=ID adds item then renders
+(function handleBuyNow() {
+  const params = new URLSearchParams(location.search);
+  const id = parseInt(params.get('buynow'));
+  if (!isNaN(id)) {
+    const prod = PRODUCTS.find(p => p.id === id);
+    if (prod) {
+      const qty = Math.max(1, parseInt(params.get('qty')) || 1);
+      const cart = getCart();
+      const idx = cart.findIndex(i => i.id === id);
+      if (idx > -1) { cart[idx].qty += qty; } else { cart.push({id: prod.id, name: prod.name, price: prod.price, img: prod.img, qty}); }
+      saveCart(cart);
+    }
+    history.replaceState(null, '', 'cart.html');
+  }
+})();
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soak Ops</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --lime: #C8FF00;
+    --pink: #E5007D;
+    --dark: #0D0D1A;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --light: #F4F4F5;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+  .blob-tr { position: fixed; top: -140px; right: -140px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(200,255,0,.15) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+  .blob-bl { position: fixed; bottom: -100px; left: -100px; width: 560px; height: 560px; background: radial-gradient(circle, rgba(150,220,255,.2) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 52px;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,.07);
+  }
+  .logo {
+    font-size: 20px; font-weight: 900; letter-spacing: -.04em;
+    color: var(--dark); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-icon { width: 26px; height: 26px; }
+  .logo span.ops { color: var(--lime); text-shadow: 0 0 16px rgba(200,255,0,.5); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--dark); text-decoration: none; transition: opacity .2s; }
+  .nav-links a:hover { opacity: .5; }
+  .btn-nav { padding: 11px 24px; background: var(--dark); color: var(--white); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: opacity .2s; }
+  .btn-nav:hover { opacity: .8; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; gap: 40px;
+    padding: 120px 52px 80px;
+    max-width: 1280px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 14px; margin-bottom: 28px;
+    background: var(--lime); border: 1.5px solid var(--dark);
+    font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  }
+  .hero-title {
+    font-size: clamp(54px, 8vw, 92px); font-weight: 900;
+    line-height: .92; letter-spacing: -.04em; text-transform: uppercase;
+  }
+  .hero-title .hl { position: relative; display: inline-block; }
+  .hero-title .hl::after { content: ''; position: absolute; bottom: 2px; left: 0; right: 0; height: 9px; background: var(--pink); z-index: -1; }
+  .cursor-bar { display: inline-block; width: 7px; height: .82em; background: var(--lime); margin-left: 3px; vertical-align: middle; animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .hero-sub { font-size: 16px; color: #4B5563; line-height: 1.6; margin: 24px 0 36px; max-width: 460px; }
+  .hero-ctas { display: flex; gap: 12px; align-items: center; margin-bottom: 44px; }
+  .btn-hero { padding: 15px 36px; background: var(--dark); color: var(--white); font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; border: 2px solid var(--dark); transition: all .2s; }
+  .btn-hero:hover { background: var(--pink); border-color: var(--pink); }
+  .btn-hero-ghost { padding: 15px 36px; background: transparent; color: var(--dark); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; border: 2px solid rgba(0,0,0,.2); transition: all .2s; }
+  .btn-hero-ghost:hover { border-color: var(--dark); }
+  .hero-stats { display: flex; align-items: center; gap: 24px; }
+  .stat-num { font-size: 21px; font-weight: 900; letter-spacing: -.02em; display: block; }
+  .stat-lbl { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); }
+  .stat-sep { width: 1px; height: 34px; background: rgba(0,0,0,.13); }
+  .hero-visual { display: flex; justify-content: center; align-items: center; }
+  .hero-stage {
+    width: 400px; height: 440px;
+    background: linear-gradient(145deg,#d8eeff,#b8d8f0);
+    border: 2px solid rgba(0,0,0,.08);
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(2.5deg); position: relative;
+  }
+  .hero-stage img { width: 88%; height: 88%; object-fit: contain; transform: rotate(-4deg); }
+  .hero-badge-drop { position: absolute; top: 18px; left: -13px; background: var(--pink); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 7px 14px; }
+  .hero-badge-range { position: absolute; bottom: 26px; right: -13px; background: var(--lime); color: var(--dark); border: 1.5px solid var(--dark); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 7px 14px; }
+
+  /* CATALOG */
+  .catalog { padding: 90px 52px; max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .cat-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; flex-wrap: wrap; gap: 20px; }
+  .cat-title { font-size: clamp(34px,4.5vw,52px); font-weight: 900; letter-spacing: -.04em; line-height: .95; text-transform: uppercase; }
+  .search-bar { display: flex; align-items: center; border: 1.5px solid rgba(0,0,0,.15); background: transparent; padding: 10px 16px; gap: 10px; min-width: 220px; }
+  .search-bar input { border: none; outline: none; font-family: inherit; font-size: 13px; color: var(--dark); background: transparent; flex: 1; }
+  .search-bar input::placeholder { color: #aaa; }
+  .filters { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  .filt { padding: 9px 20px; border: 1.5px solid rgba(0,0,0,.15); background: transparent; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: all .18s; color: var(--dark); }
+  .filt:hover { border-color: var(--dark); }
+  .filt.on { background: var(--dark); color: var(--white); border-color: var(--dark); }
+  .controls { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; margin-bottom: 30px; }
+  .ctrl-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ctrl-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); margin-right: 2px; }
+  .sort-wrap { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .sort-select { font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 9px 14px; border: 1.5px solid rgba(0,0,0,.15); background: transparent; color: var(--dark); cursor: pointer; }
+  .sort-select:hover { border-color: var(--dark); }
+  .count-label { font-size: 12px; color: var(--gray); font-weight: 600; }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+
+  /* CARD */
+  .card {
+    border: 1.5px solid rgba(0,0,0,.09);
+    overflow: hidden; display: block; text-decoration: none; color: inherit;
+    transition: transform .22s, box-shadow .22s;
+    position: relative;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,.1); }
+  .card-img {
+    height: 200px; background: #eef6ff;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+  .card:hover .card-img img { transform: scale(1.07); }
+  .card-tag {
+    position: absolute; top: 10px; left: 10px;
+    padding: 4px 9px; font-size: 10px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    background: var(--lime); color: var(--dark); border: 1px solid var(--dark);
+  }
+  .card-tag.hot { background: var(--pink); color: var(--white); border-color: var(--pink); }
+  .card-tag.dark { background: var(--dark); color: var(--white); border-color: var(--dark); }
+  .card-body { padding: 14px 16px 16px; background: var(--white); }
+  .card-name {
+    font-size: 14px; font-weight: 900; letter-spacing: -.02em;
+    text-transform: uppercase; line-height: 1.2; margin-bottom: 10px;
+  }
+  .card-name .k { color: var(--pink); }
+  .card-foot { display: flex; justify-content: space-between; align-items: center; }
+  .card-price { font-size: 18px; font-weight: 900; letter-spacing: -.02em; }
+  .sold-badge { font-size: 10px; font-weight: 700; color: var(--gray); letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .btn-buy { padding: 8px 16px; background: var(--dark); color: var(--white); font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border: none; cursor: pointer; transition: background .2s; text-decoration: none; }
+  .btn-buy:hover { background: var(--pink); }
+
+  /* NO RESULTS */
+  .no-results { grid-column: 1/-1; text-align: center; padding: 80px 20px; }
+  .no-results h3 { font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+  .no-results p { color: var(--gray); font-size: 14px; }
+
+  /* HOW */
+  .how { background: var(--dark); color: var(--white); padding: 90px 52px; }
+  .how-inner { max-width: 1280px; margin: 0 auto; }
+  .how-title { font-size: clamp(32px,4vw,50px); font-weight: 900; letter-spacing: -.04em; text-transform: uppercase; margin-bottom: 56px; }
+  .how-title span { color: var(--lime); }
+  .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 48px; }
+  .step-n { font-size: 64px; font-weight: 900; color: var(--lime); line-height: 1; letter-spacing: -.05em; margin-bottom: 14px; }
+  .step-t { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+  .step-d { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.65; }
+
+  /* FOOTER */
+  footer { padding: 32px 52px; border-top: 1px solid rgba(0,0,0,.09); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+  .foot-logo { font-size: 18px; font-weight: 900; letter-spacing: -.03em; color: var(--dark); display: flex; align-items: center; gap: 6px; }
+  .foot-logo span { color: var(--lime); }
+  .foot-copy { font-size: 11px; color: var(--gray); }
+
+  /* MOBILE */
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3,1fr); } }
+  @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 96px 20px 60px; }
+    .hero-visual { order: -1; }
+    .hero-stage { width: 280px; height: 310px; }
+    .catalog { padding: 60px 20px; }
+    .grid { grid-template-columns: repeat(2,1fr); }
+    .how { padding: 60px 20px; }
+    .steps { grid-template-columns: 1fr; gap: 36px; }
+    footer { flex-direction: column; gap: 10px; padding: 28px 20px; text-align: center; }
+  }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="blob-tr"></div>
+<div class="blob-bl"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <svg class="logo-icon" viewBox="0 0 28 28" fill="none">
+      <path d="M14 3C14 3 6 11 6 16.5C6 20.6 9.6 24 14 24C18.4 24 22 20.6 22 16.5C22 11 14 3 14 3Z" fill="#C8FF00" stroke="#0D0D1A" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="2.5" fill="#0D0D1A"/>
+      <line x1="14" y1="8" x2="14" y2="11" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14" y1="17" x2="14" y2="20" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="8" y1="14" x2="11" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="17" y1="14" x2="20" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    SOAK<span class="ops"> OPS</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#catalog">Shop</a></li>
+    <li><a href="#how">How It Works</a></li>
+  </ul>
+  <div style="display:flex;gap:12px;align-items:center;">
+    <a href="cart.html" class="btn-nav" style="position:relative;">
+      Cart
+      <span id="nav-count" style="position:absolute;top:-6px;right:-6px;background:#E5007D;color:#fff;font-size:10px;font-weight:900;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;">0</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge" id="hero-badge">✦ &nbsp;215 GUNS. LIVE NOW.</div>
+    <h1 class="hero-title">
+      SOAK THE<span class="cursor-bar"></span><br>
+      <span class="hl">COMPETITION.</span>
+    </h1>
+    <p class="hero-sub">Premium water blasters, electric soakers and battle bundles — shipped to your door in 7–12 days.</p>
+    <div class="hero-ctas">
+      <a href="#catalog" class="btn-hero" id="hero-cta">Shop All 215 Guns →</a>
+      <a href="#how" class="btn-hero-ghost">How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num" id="hero-stat">215</span><span class="stat-lbl">Products</span></div>
+      <div class="stat-sep"></div>
+      <div><span class="stat-num">4.8★</span><span class="stat-lbl">Avg Rating</span></div>
+      <div class="stat-sep"></div>
+      <div><span class="stat-num">7–12d</span><span class="stat-lbl">U.S. Delivery</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-stage">
+      <div class="hero-badge-drop">NEW DROP</div>
+      <img src="assets/products/S3d95d162000542f0829416c772ca5578W.jpg_480x480q75.jpg" alt="Electric Auto Water Gun"/>
+      <div class="hero-badge-range">30-FT RANGE</div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section class="catalog" id="catalog">
+  <div class="cat-header">
+    <h2 class="cat-title">THE ARSENAL</h2>
+    <div class="search-bar">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#aaa" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg>
+      <input type="text" id="search" placeholder="Search guns..." oninput="renderProducts()">
+    </div>
+  </div>
+  <div class="filters">
+    <button class="filt on" data-cat="all" onclick="setFilter(this)">All</button>
+    <button class="filt" data-cat="electric" onclick="setFilter(this)">⚡ Electric</button>
+    <button class="filt" data-cat="pistol" onclick="setFilter(this)">🔫 Pistols</button>
+    <button class="filt" data-cat="backpack" onclick="setFilter(this)">🎒 Backpack</button>
+    <button class="filt" data-cat="bundle" onclick="setFilter(this)">📦 Bundles</button>
+    <button class="filt" data-cat="kids" onclick="setFilter(this)">👶 Kids</button>
+    <button class="filt" data-cat="gel" onclick="setFilter(this)">💥 Gel Blasters</button>
+  </div>
+  <div class="controls">
+    <div class="ctrl-group">
+      <span class="ctrl-label">For</span>
+      <button class="filt on" data-aud="all" onclick="setAudience(this)">Everyone</button>
+      <button class="filt" data-aud="kids" onclick="setAudience(this)">👶 Kids</button>
+      <button class="filt" data-aud="adults" onclick="setAudience(this)">🔥 Adults</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Feature</span>
+      <button class="filt" id="hp-chip" onclick="toggleHP(this)">💪 High Pressure</button>
+    </div>
+    <div class="sort-wrap">
+      <span class="ctrl-label">Sort</span>
+      <select class="sort-select" id="sort" title="Sort products" aria-label="Sort products" onchange="renderProducts()">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <h2 class="how-title">HOW IT<br><span>WORKS</span></h2>
+    <div class="steps">
+      <div>
+        <div class="step-n">01</div>
+        <div class="step-t">Pick Your Weapon</div>
+        <div class="step-d">Browse 215 water guns across electric, pistol, backpack, and bundle categories.</div>
+      </div>
+      <div>
+        <div class="step-n">02</div>
+        <div class="step-t">Order Direct</div>
+        <div class="step-d">Click Shop Now and order through our trusted supplier network — vetted for quality.</div>
+      </div>
+      <div>
+        <div class="step-n">03</div>
+        <div class="step-t">Delivered in 7–12 Days</div>
+        <div class="step-d">Fast U.S. shipping with full tracking. Battle-ready before the weekend.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">
+    <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+      <path d="M14 3C14 3 6 11 6 16.5C6 20.6 9.6 24 14 24C18.4 24 22 20.6 22 16.5C22 11 14 3 14 3Z" fill="#C8FF00" stroke="#0D0D1A" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="2.5" fill="#0D0D1A"/>
+      <line x1="14" y1="8" x2="14" y2="11" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14" y1="17" x2="14" y2="20" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="8" y1="14" x2="11" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="17" y1="14" x2="20" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    SOAK <span>OPS</span>
+  </div>
+  <div class="foot-copy">© 2026 Soak Ops. All rights reserved.</div>
+</footer>
+
+<script src="products.js"></script>
+<script>
+
+let activeCat = 'all', activeAud = 'all', highPressureOnly = false;
+
+function setFilter(btn) {
+  document.querySelectorAll('.filt[data-cat]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  activeCat = btn.dataset.cat;
+  renderProducts();
+}
+
+function setAudience(btn) {
+  document.querySelectorAll('.filt[data-aud]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  activeAud = btn.dataset.aud;
+  renderProducts();
+}
+
+function toggleHP(btn) {
+  highPressureOnly = !highPressureOnly;
+  btn.classList.toggle('on', highPressureOnly);
+  renderProducts();
+}
+
+// Derive audience / feature tags from existing product fields (no fabricated data).
+function attrs(p) {
+  const t = (p.name + ' ' + (p.desc || '') + ' ' + p.tag + ' ' + (p.link || '') + ' ' + (p.features || []).join(' ')).toLowerCase();
+  return {
+    kids:   p.cat === 'kids' || /\bkid|child/.test(t),
+    adults: /\badult/.test(t),
+    hp:     /high.?pressure/.test(t)
+  };
+}
+
+function renderProducts() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const sort = document.getElementById('sort').value;
+  const grid = document.getElementById('grid');
+  let filtered = PRODUCTS.filter(p => {
+    const a = attrs(p);
+    const catOk = activeCat === 'all' || p.cat === activeCat;
+    const audOk = activeAud === 'all' || (activeAud === 'kids' && a.kids) || (activeAud === 'adults' && a.adults);
+    const hpOk  = !highPressureOnly || a.hp;
+    const qOk   = !q || p.name.toLowerCase().includes(q) || p.tag.toLowerCase().includes(q) || p.cat.includes(q);
+    return catOk && audOk && hpOk && qOk;
+  });
+  if (sort === 'price-asc')       filtered.sort((a, b) => a.price - b.price);
+  else if (sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);
+  else if (sort === 'rating')     filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="no-results"><h3>No Guns Found</h3><p>Try a different search or filter.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const tagClass = p.tagType === 'hot' ? 'card-tag hot' : p.tagType === 'dark' ? 'card-tag dark' : 'card-tag';
+    const soldLine = p.sold !== 'New' ? `<span class="sold-badge">${p.sold} sold${p.rating ? ' · ' + p.rating + '★' : ''}</span>` : '';
+    const nameHtml = p.name.replace(/(\b\w+\b)$/, '<span class="k">$1</span>');
+    return `
+    <a class="card" href="product.html?id=${p.id}">
+      <div class="card-img">
+        <img src="${CDN}${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'"/>
+        <span class="${tagClass}">${p.tag}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${nameHtml}</div>
+        <div class="card-foot">
+          <div>${soldLine}<span class="card-price">$${p.price.toFixed(2)}</span></div>
+          <span class="btn-buy">Buy Now</span>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+renderProducts();
+
+(function updateCartBadge() {
+  const cart = JSON.parse(localStorage.getItem('soakops-cart') || '[]');
+  const n = cart.reduce((s, i) => s + i.qty, 0);
+  const el = document.getElementById('nav-count');
+  if (el) { el.textContent = n; el.style.display = n ? 'flex' : 'none'; }
+})();
+</script>
+</body>
+</html>

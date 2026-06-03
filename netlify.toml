@@ -1,0 +1,18 @@
+# Security headers applied to every page served by Netlify.
+# Purely additive — does not change any page content or behavior.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Stop other sites from embedding yours in a frame (clickjacking).
+    X-Frame-Options = "DENY"
+    # Stop browsers from guessing/overriding declared file types.
+    X-Content-Type-Options = "nosniff"
+    # Don't leak full URLs to other sites in the Referer header.
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Turn off device APIs the site doesn't use.
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+    # Force HTTPS for a year (Netlify already serves HTTPS).
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    # Only allow content from your own site, plus Google Fonts.
+    # Inline styles/scripts are allowed because the pages use them.
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https://cdn.shopify.com https://ae-pic-a1.aliexpress-media.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; base-uri 'self'; form-action 'self' https://0u1gd1-9z.myshopify.com; frame-ancestors 'none'; object-src 'none'"

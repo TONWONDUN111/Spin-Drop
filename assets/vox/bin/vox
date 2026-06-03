@@ -1,0 +1,267 @@
+#!/usr/bin/env bash
+# Vox CLI — give your AI a voice.
+#   vox personas            list curated named voices (Alfred, Jarvis, …)
+#   vox voices              list raw voices for the current engine
+#   vox preview [name]      hear a persona (no name = hear them all)
+#   vox use <name>          set a persona or a raw voice
+#   vox engine <name>       auto | say | elevenlabs | openai
+#   vox rate <wpm>          speaking rate (macOS `say` only)
+#   vox mode <m>            summary | full | chime
+#   vox test [text]         speak a test line
+#   vox key eleven <KEY>    add an ElevenLabs API key (unlocks premium voices)
+#   vox key openai <KEY>    add an OpenAI API key
+#   vox upgrade             open the ElevenLabs page to get realistic voices
+#   vox install             wire the Stop hook into Claude Code settings.json
+#   vox uninstall           remove the Stop hook
+#   vox config              show current settings
+set -uo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../lib" && pwd)"
+SPEAK="$DIR/speak.sh"
+# shellcheck source=/dev/null
+. "$DIR/common.sh"
+vox_load_config
+
+bold(){ printf '\033[1m%s\033[0m\n' "$*"; }
+dim(){ printf '\033[2m%s\033[0m\n' "$*"; }
+ok(){ printf '\033[32m✓\033[0m %s\n' "$*"; }
+warn(){ printf '\033[33m!\033[0m %s\n' "$*"; }
+
+cmd_voices() {
+  local engine; engine="$(vox_resolve_engine)"
+  dim "Tip: 'vox personas' lists curated named voices (Alfred, Jarvis, …)."
+  bold "Engine: $engine"
+  case "$engine" in
+    say)
+      case "$(vox_os)" in
+        macos)
+          dim "Installed system voices (★ = recommended, lifelike):"
+          local recommended="Daniel Serena Stephanie Allison Ava Tom Samantha Oliver Karen Moira Rishi"
+          say -v '?' 2>/dev/null | while IFS= read -r line; do
+            local name; name="$(printf '%s' "$line" | awk '{print $1}')"
+            if printf '%s ' $recommended | grep -q " $name "; then
+              printf '  ★ %s\n' "$line"
+            else
+              printf '    %s\n' "$line"
+            fi
+          done
+          dim "More natural voices: System Settings ▸ Accessibility ▸ Spoken Content ▸ Manage Voices (look for \"(Premium)\")."
+          ;;
+        linux)   dim "Uses spd-say/espeak. Run 'spd-say -L' or 'espeak --voices' to list."; ;;
+        windows) dim "Uses Windows SAPI voices (Settings ▸ Time & Language ▸ Speech)."; ;;
+      esac
+      ;;
+    elevenlabs)
+      [ -n "$VOX_ELEVEN_API_KEY" ] || { warn "No ElevenLabs key set. Run: vox key eleven <KEY>"; return; }
+      command -v curl >/dev/null || { warn "curl required"; return; }
+      dim "Your ElevenLabs voices (id — name):"
+      if command -v jq >/dev/null 2>&1; then
+        curl -fsS "https://api.elevenlabs.io/v1/voices" -H "xi-api-key: $VOX_ELEVEN_API_KEY" 2>/dev/null \
+          | jq -r '.voices[] | "  \(.voice_id)  —  \(.name)"'
+      else
+        curl -fsS "https://api.elevenlabs.io/v1/voices" -H "xi-api-key: $VOX_ELEVEN_API_KEY" 2>/dev/null
+      fi
+      dim "Set one with: vox use <voice_id>"
+      ;;
+    openai)
+      dim "OpenAI voices: alloy ash ballad coral echo fable onyx nova sage shimmer"
+      dim "Set one with: vox use <name>"
+      ;;
+  esac
+}
+
+cmd_personas() {
+  bold "Curated voices — pick one with:  vox use <name>"
+  local engine; engine="$(vox_resolve_engine)"
+  vox_personas | while IFS="$(printf '\t')" read -r id label sv sr ev ov; do
+    printf '  \033[1m%-9s\033[0m %s\n' "$id" "$label"
+  done
+  echo
+  if [ "$engine" = "say" ]; then
+    dim "On the free engine these speak through your OS voice (British personas → $( [ "$(vox_os)" = macos ] && echo Daniel || echo system ))."
+    dim "For truly human, studio-quality versions:  vox upgrade"
+  else
+    dim "Active engine: $engine — these map to its realistic neural voices."
+  fi
+}
+
+cmd_preview() {
+  # Speak a sample in one persona (or all) WITHOUT changing saved config.
+  local ids; ids="${1:-$(vox_personas | cut -f1 | tr '\n' ' ')}"
+  local engine; engine="$(vox_resolve_engine)"
+  local id row pid label sv sr ev ov name
+  for id in $ids; do
+    row="$(vox_persona_row "$id")"
+    if [ -z "$row" ]; then warn "no such persona: $id (see: vox personas)"; continue; fi
+    IFS="$(printf '\t')" read -r pid label sv sr ev ov <<EOF
+$row
+EOF
+    # Per-utterance overrides only — these globals aren't persisted to config.env.
+    VOX_VOICE="$sv"; VOX_RATE="$sr"; VOX_ELEVEN_VOICE_ID="$ev"; VOX_OPENAI_VOICE="$ov"
+    name="${label%% *}"
+    dim "[$engine] $label"
+    vox_speak "Hello, I am $name. Shall I read your replies aloud?"
+  done
+  [ "$engine" = say ] && dim "Free system voices. 'vox upgrade' unlocks the human versions."
+}
+
+cmd_use() {
+  [ -n "${1:-}" ] || { warn "usage: vox use <voice|persona>   (see: vox personas)"; exit 1; }
+  local row; row="$(vox_persona_row "$1")"
+  if [ -n "$row" ]; then
+    local id label sv sr ev ov
+    IFS="$(printf '\t')" read -r id label sv sr ev ov <<EOF
+$row
+EOF
+    # A persona configures every engine at once, so it works before and after upgrade.
+    vox_set VOX_VOICE "$sv"
+    vox_set VOX_RATE "$sr"
+    vox_set VOX_ELEVEN_VOICE_ID "$ev"
+    vox_set VOX_OPENAI_VOICE "$ov"
+    ok "Voice set to: $label"
+    [ "$(vox_resolve_engine)" = "say" ] && \
+      dim "Free system voice for now ($sv). Run 'vox upgrade' for the studio version."
+  else
+    case "$(vox_resolve_engine)" in
+      elevenlabs) vox_set VOX_ELEVEN_VOICE_ID "$1" ;;
+      openai)     vox_set VOX_OPENAI_VOICE "$1" ;;
+      *)          vox_set VOX_VOICE "$1" ;;
+    esac
+    ok "Voice set to: $1"
+  fi
+  vox_load_config
+  cmd_test "Voice set. This is how I sound now."
+}
+
+cmd_engine() {
+  case "${1:-}" in
+    auto|say|elevenlabs|openai) vox_set VOX_ENGINE "$1"; ok "Engine: $1" ;;
+    *) warn "usage: vox engine <auto|say|elevenlabs|openai>"; exit 1 ;;
+  esac
+}
+
+cmd_rate(){ vox_set VOX_RATE "${1:?usage: vox rate <wpm>}"; ok "Rate: $1 wpm"; }
+cmd_mode(){
+  case "${1:-}" in summary|full|chime) vox_set VOX_MODE "$1"; ok "Mode: $1";;
+    *) warn "usage: vox mode <summary|full|chime>"; exit 1;; esac
+}
+
+cmd_key() {
+  case "${1:-}" in
+    eleven) vox_set VOX_ELEVEN_API_KEY "${2:?key required}"; vox_set VOX_ENGINE elevenlabs
+            ok "ElevenLabs key saved + engine switched. Try: vox voices" ;;
+    openai) vox_set VOX_OPENAI_API_KEY "${2:?key required}"; vox_set VOX_ENGINE openai
+            ok "OpenAI key saved + engine switched. Try: vox voices" ;;
+    *) warn "usage: vox key <eleven|openai> <API_KEY>"; exit 1 ;;
+  esac
+}
+
+cmd_test() {
+  local text="${1:-Good evening. Your voice assistant is online and at your service.}"
+  vox_load_config
+  local rendered; rendered="$(vox_render "$text")"
+  dim "[$(vox_resolve_engine)] speaking: $rendered"
+  vox_speak "$rendered"
+}
+
+cmd_upgrade() {
+  local url="${VOX_REFERRAL_URL:-$VOX_DEFAULT_REFERRAL}"
+  bold "Unlock studio-quality, human voices"
+  echo "Vox sounds best with ElevenLabs voices. Open the link, grab a free API key,"
+  echo "then run:  vox key eleven <YOUR_KEY>  &&  vox voices"
+  echo
+  echo "  $url"
+  echo
+  case "$(vox_os)" in
+    macos) command -v open >/dev/null && open "$url" ;;
+    linux) command -v xdg-open >/dev/null && xdg-open "$url" >/dev/null 2>&1 || true ;;
+    windows) command -v explorer.exe >/dev/null && explorer.exe "$url" || true ;;
+  esac
+}
+
+# Add/remove the Stop hook in ~/.claude/settings.json (non-plugin install path).
+cmd_install() {
+  local settings="${CLAUDE_SETTINGS:-$HOME/.claude/settings.json}"
+  mkdir -p "$(dirname "$settings")"
+  [ -f "$settings" ] || echo '{}' > "$settings"
+  local hookcmd="\"$SPEAK\""
+  if command -v python3 >/dev/null 2>&1; then
+    SETTINGS="$settings" HOOKCMD="$SPEAK" python3 - <<'PY'
+import json, os
+p = os.environ["SETTINGS"]; cmd = os.environ["HOOKCMD"]
+try: d = json.load(open(p))
+except Exception: d = {}
+hooks = d.setdefault("hooks", {}); stop = hooks.setdefault("Stop", [])
+def has(node):
+    return any(h.get("command","").strip().strip('"') == cmd
+              for g in node for h in g.get("hooks", []))
+if not has(stop):
+    stop.append({"hooks":[{"type":"command","command":f'"{cmd}"',"timeout":15}]})
+    json.dump(d, open(p,"w"), indent=2); print("installed")
+else:
+    print("exists")
+PY
+  elif command -v jq >/dev/null 2>&1; then
+    local tmp; tmp="$(mktemp)"
+    jq --arg c "$hookcmd" '
+      .hooks.Stop = ((.hooks.Stop // []) +
+        (if any(.hooks.Stop[]?; .hooks[]?.command == $c) then [] else
+          [{"hooks":[{"type":"command","command":$c,"timeout":15}]}] end))' \
+      "$settings" > "$tmp" && mv "$tmp" "$settings"
+  else
+    warn "Need python3 or jq to edit settings.json. Add this Stop hook manually:"
+    echo "  $hookcmd"; return 1
+  fi
+  ok "Installed Stop hook into $settings"
+  dim "Open a new Claude Code session (or run /hooks) to load it."
+}
+
+cmd_uninstall() {
+  local settings="${CLAUDE_SETTINGS:-$HOME/.claude/settings.json}"
+  [ -f "$settings" ] || { warn "no settings file"; return; }
+  if command -v python3 >/dev/null 2>&1; then
+    SETTINGS="$settings" HOOKCMD="$SPEAK" python3 - <<'PY'
+import json, os
+p = os.environ["SETTINGS"]; cmd = os.environ["HOOKCMD"]
+d = json.load(open(p))
+stop = d.get("hooks", {}).get("Stop", [])
+for g in stop:
+    g["hooks"] = [h for h in g.get("hooks", []) if h.get("command","").strip().strip('"') != cmd]
+d.get("hooks", {})["Stop"] = [g for g in stop if g.get("hooks")]
+if not d["hooks"]["Stop"]: del d["hooks"]["Stop"]
+json.dump(d, open(p,"w"), indent=2)
+PY
+    ok "Removed Vox Stop hook."
+  else warn "Need python3 to edit settings.json automatically."; fi
+}
+
+cmd_config() {
+  bold "Vox config ($VOX_CONFIG)"
+  printf '  engine : %s  (resolved: %s)\n' "$VOX_ENGINE" "$(vox_resolve_engine)"
+  printf '  voice  : %s\n' "${VOX_VOICE:-<engine default>}"
+  printf '  rate   : %s wpm\n' "$VOX_RATE"
+  printf '  mode   : %s\n' "$VOX_MODE"
+  printf '  eleven : %s\n' "$([ -n "$VOX_ELEVEN_API_KEY" ] && echo 'key set ('"${VOX_ELEVEN_VOICE_ID:-default voice}"')' || echo 'not set')"
+  printf '  openai : %s\n' "$([ -n "$VOX_OPENAI_API_KEY" ] && echo "key set ($VOX_OPENAI_VOICE)" || echo 'not set')"
+}
+
+# Print the leading comment block (the usage header) — stops at the first code line.
+usage(){ awk 'NR>1{ if (/^#/){ sub(/^# ?/,""); print } else exit }' "$0"; }
+
+case "${1:-help}" in
+  personas|catalog) cmd_personas ;;
+  preview|demo) shift; cmd_preview "$@" ;;
+  voices) cmd_voices ;;
+  use) shift; cmd_use "$@" ;;
+  engine) shift; cmd_engine "$@" ;;
+  rate) shift; cmd_rate "$@" ;;
+  mode) shift; cmd_mode "$@" ;;
+  key) shift; cmd_key "$@" ;;
+  test) shift; cmd_test "$@" ;;
+  upgrade|premium) cmd_upgrade ;;
+  install) cmd_install ;;
+  uninstall) cmd_uninstall ;;
+  config) cmd_config ;;
+  help|-h|--help) usage ;;
+  *) warn "unknown command: $1"; usage; exit 1 ;;
+esac

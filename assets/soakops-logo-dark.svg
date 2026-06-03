@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 120" width="440" height="120" fill="none">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&amp;display=swap');
+    .wm { font-family: 'Inter','Helvetica Neue',Arial,sans-serif; font-weight: 900; font-size: 58px; letter-spacing: -2.5px; }
+  </style>
+  <rect width="440" height="120" fill="#0D0D1A"/>
+  <g transform="translate(6,28) scale(2.29)">
+    <path d="M14 3C14 3 6 11 6 16.5C6 20.6 9.6 24 14 24C18.4 24 22 20.6 22 16.5C22 11 14 3 14 3Z" fill="#C8FF00" stroke="#0D0D1A" stroke-width="1.5"/>
+    <circle cx="14" cy="14" r="2.5" fill="#0D0D1A"/>
+    <line x1="14" y1="8" x2="14" y2="11" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="14" y1="17" x2="14" y2="20" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="8" y1="14" x2="11" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="17" y1="14" x2="20" y2="14" stroke="#0D0D1A" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+  <text class="wm" x="84" y="80" fill="#FFFFFF">SOAK<tspan fill="#C8FF00">OPS</tspan></text>
+</svg>

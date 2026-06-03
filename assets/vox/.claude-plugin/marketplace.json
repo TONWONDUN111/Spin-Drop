@@ -1,0 +1,11 @@
+{
+  "name": "vox-marketplace",
+  "owner": { "name": "Vox" },
+  "plugins": [
+    {
+      "name": "vox",
+      "source": "./",
+      "description": "Give your AI a voice — speaks Claude's replies aloud with free or premium voices."
+    }
+  ]
+}
