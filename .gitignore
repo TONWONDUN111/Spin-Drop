@@ -1,2 +1,7 @@
 # Local Netlify folder
 .netlify
+
+# Never commit real passwords or API keys
+.env
+.env.*
+!.env.example

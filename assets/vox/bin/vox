@@ -11,6 +11,7 @@
 #   vox key eleven <KEY>    add an ElevenLabs API key (unlocks premium voices)
 #   vox key openai <KEY>    add an OpenAI API key
 #   vox upgrade             open the ElevenLabs page to get realistic voices
+#   vox open human          open the page to unlock human-sounding voices
 #   vox install             wire the Stop hook into Claude Code settings.json
 #   vox uninstall           remove the Stop hook
 #   vox config              show current settings
@@ -179,6 +180,23 @@ cmd_upgrade() {
   esac
 }
 
+cmd_open() {
+  case "${1:-}" in
+    human|voices|premium|upgrade)
+      cmd_upgrade
+      ;;
+    "")
+      warn "usage: vox open human"
+      exit 1
+      ;;
+    *)
+      warn "unknown open target: $1"
+      warn "usage: vox open human"
+      exit 1
+      ;;
+  esac
+}
+
 # Add/remove the Stop hook in ~/.claude/settings.json (non-plugin install path).
 cmd_install() {
   local settings="${CLAUDE_SETTINGS:-$HOME/.claude/settings.json}"
@@ -258,6 +276,7 @@ case "${1:-help}" in
   mode) shift; cmd_mode "$@" ;;
   key) shift; cmd_key "$@" ;;
   test) shift; cmd_test "$@" ;;
+  open) shift; cmd_open "$@" ;;
   upgrade|premium) cmd_upgrade ;;
   install) cmd_install ;;
   uninstall) cmd_uninstall ;;

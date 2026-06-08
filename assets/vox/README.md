@@ -97,6 +97,7 @@ OpenAI works the same way:
 ```
 vox key openai <YOUR_API_KEY>
 vox use onyx                      # alloy ash ballad coral echo fable onyx nova sage shimmer
+vox open human                    # opens the upgrade page for human voices
 ```
 
 Cloud voices fall back to the free system voice automatically if a request fails,

@@ -1,7 +1,7 @@
 ---
 description: Pick or test the voice Vox uses to read replies aloud
 allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/bin/vox:*)
-argument-hint: "[personas|preview <name>|use <name>|voices|engine <name>|rate <wpm>|mode <m>|test|upgrade]  (no args = show config)"
+argument-hint: "[personas|preview <name>|use <name>|voices|engine <name>|rate <wpm>|mode <m>|test|upgrade|open human]  (no args = show config)"
 ---
 
 The user wants to manage their Vox voice settings. Their request: `$ARGUMENTS`
@@ -17,5 +17,6 @@ Run the Vox CLI to fulfill it. The binary is at `${CLAUDE_PLUGIN_ROOT}/bin/vox`.
 - "test ..." → run `vox test` with the given text.
 - "upgrade" / asks for better/more realistic voices → run `vox upgrade` and explain they
   can paste a key with `vox key eleven <KEY>` to unlock studio-quality voices.
+- "open human" / asks to open human voices → run `vox open human`.
 
 After running, briefly tell the user what changed and suggest the next step.
