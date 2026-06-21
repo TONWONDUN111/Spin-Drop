@@ -249,6 +249,7 @@ function getCart() {
       const prod = PRODUCTS.find(p => p.id === id);
       return {
         id,
+        vid:   (prod && prod.vid) || i.vid || null,
         name:  String((prod && prod.name)  || i.name || '').slice(0, 120),
         price: parseFloat((prod && prod.price) ?? i.price) || 0,
         img:   String((prod && prod.img)   || i.img || ''),

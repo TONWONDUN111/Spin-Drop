@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spin Drop — Premium Fidget Spinners & Sensory Toys</title>
-<meta name="description" content="Shop 62 fidget spinners, sensory toys & stress-relief tools. Metal, titanium, LED, cubes, rings, pop-its and EDC fidgets. Free shipping. Use code SPIN15 for 15% off.">
+<meta name="description" content="Shop 70 fidget spinners, sensory toys & stress-relief tools. Metal, titanium, LED, cubes, rings, pop-its and EDC fidgets. Free shipping. Use code SPIN15 for 15% off.">
 <meta name="keywords" content="fidget spinner, sensory toys, stress relief toys, fidget cube, pop it, anxiety toys, EDC fidget, magnetic rings, kinetic sand">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://spindrop.shop/">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spindrop.shop/">
 <meta property="og:title" content="Spin Drop — Premium Fidget Spinners & Sensory Toys">
-<meta property="og:description" content="62 fidget spinners, sensory toys & stress-relief tools. Free shipping. Use code SPIN15 for 15% off your first order.">
+<meta property="og:description" content="70 fidget spinners, sensory toys & stress-relief tools. Free shipping. Use code SPIN15 for 15% off your first order.">
 <meta property="og:image" content="https://spindrop.shop/assets/og-image.png">
 <meta property="og:site_name" content="Spin Drop">
 
@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://spindrop.shop/">
 <meta name="twitter:title" content="Spin Drop — Premium Fidget Spinners & Sensory Toys">
-<meta name="twitter:description" content="62 fidget spinners, sensory toys & stress-relief tools. Free shipping. Use code SPIN15 for 15% off.">
+<meta name="twitter:description" content="70 fidget spinners, sensory toys & stress-relief tools. Free shipping. Use code SPIN15 for 15% off.">
 <meta name="twitter:image" content="https://spindrop.shop/assets/og-image.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -56,7 +56,7 @@
       "@id": "https://spindrop.shop/#store",
       "name": "Spin Drop",
       "url": "https://spindrop.shop",
-      "description": "62 premium fidget spinners, sensory toys and stress-relief tools. Free shipping. Use code SPIN15 for 15% off.",
+      "description": "70 premium fidget spinners, sensory toys and stress-relief tools. Free shipping. Use code SPIN15 for 15% off.",
       "priceRange": "$2 - $60",
       "currenciesAccepted": "USD",
       "paymentAccepted": "Credit Card",
@@ -113,7 +113,7 @@ ttq.page();
   .promo-bar {
     background: var(--purple); color: var(--white);
     text-align: center; font-size: 12px; font-weight: 600; letter-spacing: .06em;
-    padding: 10px 20px; position: relative; z-index: 101;
+    padding: 10px 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 101;
   }
   .promo-bar strong { color: var(--gold); font-weight: 900; letter-spacing: .08em; }
 
@@ -380,7 +380,7 @@ ttq.page();
 <!-- HERO -->
 <section class="hero">
   <div>
-    <div class="hero-badge">✦ &nbsp;62 STYLES. LIVE NOW.</div>
+    <div class="hero-badge">✦ &nbsp;70 STYLES. LIVE NOW.</div>
     <h1 class="hero-title">
       SPIN.<span class="cursor-bar"></span><br>
       <span class="hl">FOCUS.</span><br>
@@ -388,11 +388,11 @@ ttq.page();
     </h1>
     <p class="hero-sub">Premium fidget spinners, sensory toys and stress-relief tools — shipped to your door in 7–12 days.</p>
     <div class="hero-ctas">
-      <a href="#catalog" class="btn-hero">Shop All 62 Styles →</a>
+      <a href="#catalog" class="btn-hero">Shop All 70 Styles →</a>
       <a href="#how" class="btn-hero-ghost">How It Works</a>
     </div>
     <div class="hero-stats">
-      <div><span class="stat-num">62</span><span class="stat-lbl">Products</span></div>
+      <div><span class="stat-num">70</span><span class="stat-lbl">Products</span></div>
       <div class="stat-sep"></div>
       <div><span class="stat-num">4.7★</span><span class="stat-lbl">Avg Rating</span></div>
       <div class="stat-sep"></div>
@@ -409,7 +409,7 @@ ttq.page();
         <circle cx="100" cy="100" r="20" fill="#F59E0B"/>
         <circle cx="100" cy="100" r="9"  fill="#1C1028"/>
       </svg>
-      <div class="hero-badge-range">60+ STYLES</div>
+      <div class="hero-badge-range">70+ STYLES</div>
     </div>
   </div>
 </section>
@@ -472,7 +472,7 @@ ttq.page();
       <div>
         <div class="step-n">01</div>
         <div class="step-t">Pick Your Style</div>
-        <div class="step-d">Browse 62 fidget spinners, cubes, rings, sensory toys and EDC gadgets across 6 categories.</div>
+        <div class="step-d">Browse 70 fidget spinners, cubes, rings, sensory toys and EDC gadgets across 6 categories.</div>
       </div>
       <div>
         <div class="step-n">02</div>
@@ -571,7 +571,7 @@ function renderProducts() {
   if (sort === 'price-asc')       filtered.sort((a, b) => a.price - b.price);
   else if (sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);
   else if (sort === 'rating')     filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-  else if (sort === 'popular')    filtered.sort((a, b) => parseInt(b.sold) - parseInt(a.sold));
+  else if (sort === 'popular')    filtered.sort((a, b) => (parseInt(String(b.sold).replace(/[^0-9]/g,'')) || 0) - (parseInt(String(a.sold).replace(/[^0-9]/g,'')) || 0));
 
   document.getElementById('count-label').textContent = filtered.length + ' product' + (filtered.length !== 1 ? 's' : '');
 
@@ -583,14 +583,14 @@ function renderProducts() {
   grid.innerHTML = filtered.map(p => {
     const meta     = CAT_META[p.cat] || CAT_META.spinner;
     const tagClass = p.tagType === 'hot' ? 'card-tag hot' : p.tagType === 'dark' ? 'card-tag dark' : 'card-tag';
-    const soldLine = p.sold ? `<span class="sold-badge">${p.sold} sold${p.rating ? ' · ' + p.rating + '★' : ''}</span>` : '';
+    const soldLine = (p.sold && p.sold !== 'New') ? `<span class="sold-badge">${p.sold} sold${p.rating ? ' · ' + p.rating + '★' : ''}</span>` : '';
     const nameHtml = p.name.replace(/(\b\w+\b)$/, '<span class="k">$1</span>');
     return `
     <div class="card">
       <div class="card-img" style="background:${meta.bg}">
         <span class="card-emoji">${meta.emoji}</span>
         ${p.img ? `<img src="${CDN}${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'"/>` : ''}
-        <span class="${tagClass}" style="z-index:2">${p.tag}</span>
+        ${p.tag ? `<span class="${tagClass}">${p.tag}</span>` : ''}
       </div>
       <div class="card-body">
         <div class="card-name">${nameHtml}</div>
