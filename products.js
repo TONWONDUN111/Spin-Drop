@@ -1,1125 +1,269 @@
 const CDN = 'https://ae-pic-a1.aliexpress-media.com/kf/';
+const CART_KEY = 'spindrop-cart';
+const SHOP_DOMAIN = 'https://spindrop.shop';
+
+// Prices = AliExpress supplier cost × 2.75, rounded to .99 / .49
 
 const PRODUCTS = [
-  {
-    id: 0,
-    name: "Electric Auto Blaster",
-    price: 37.98,
-    img: "S3d95d162000542f0829416c772ca5578W.jpg_480x480q75.jpg",
-    tag: "BESTSELLER",
-    tagType: "hot",
-    cat: "electric",
-    sold: "10,000+",
-    rating: 4.8,
-    link: "electric+water+gun+automatic+squirt+adult",
-    desc: "Powerful auto-squirt with built-in electric pump — no manual pumping ever. Point, pull trigger, soak everything in range.",
-    features: [
-      "Auto electric pump",
-      "Long-range stream",
-      "Built for adults & kids",
-      "Easy refill port"
-    ]
-  },
-  {
-    id: 1,
-    name: "High Pressure Electric",
-    price: 41.98,
-    img: "S3d816ceaee774c3a8b3259938c9f7311Y.jpg_480x480q75.jpg",
-    tag: "4K+ SOLD",
-    tagType: "hot",
-    cat: "electric",
-    sold: "4,000+",
-    rating: 4.8,
-    link: "children+high+pressure+electric+water+gun+beach",
-    desc: "High-pressure electric burst designed for outdoor beach and pool battles. Rapid auto-fire mode means no one gets a dry second.",
-    features: [
-      "High-pressure burst mode",
-      "Auto continuous fire",
-      "Beach & pool ready",
-      "Kids & adult size"
-    ]
-  },
-  {
-    id: 2,
-    name: "Burst Blaster Pro",
-    price: 39.98,
-    img: "Sa2974af1ccf74918a7110d254d6b8d92r.jpg_480x480q75.jpg",
-    tag: "10K+ SOLD",
-    tagType: "hot",
-    cat: "electric",
-    sold: "10,000+",
-    rating: 4.7,
-    link: "electric+water+gun+portable+burst+automatic",
-    desc: "10,000+ units sold speaks for itself. Portable auto-burst mechanism fires rapid streams without pause.",
-    features: [
-      "Rapid burst fire",
-      "Compact portable design",
-      "10K+ proven sales",
-      "Strong trigger response"
-    ]
-  },
-  {
-    id: 3,
-    name: "Compact 4.9★ Blaster",
-    price: 31.98,
-    img: "S15268e70cb694d36be8ee3ab3f8bb611f.jpg_480x480q75.jpg",
-    tag: "4.9★ RATED",
-    tagType: "",
-    cat: "electric",
-    sold: "4,000+",
-    rating: 4.9,
-    link: "electric+water+gun+squirt+blaster+automatic+suction",
-    desc: "Highest-rated compact blaster in the catalog. Easy to carry, hard to dodge — the 4.9 star score says it all.",
-    features: [
-      "4.9★ verified rating",
-      "Compact one-hand design",
-      "Auto suction refill",
-      "4,000+ happy buyers"
-    ]
-  },
-  {
-    id: 4,
-    name: "Pro Soaker XL",
-    price: 69.98,
-    img: "S3302b3f55145439c80b2345c4ab42620F.jpg_480x480q75.jpg",
-    tag: "PRO",
-    tagType: "dark",
-    cat: "electric",
-    sold: "10,000+",
-    rating: 4.6,
-    link: "electric+water+gun+adults+high+pressure+long+range",
-    desc: "XL tank, full-auto electric mode, and long-range stream for serious competitors. Built for players who want to win every time.",
-    features: [
-      "XL high-capacity tank",
-      "Full-auto electric mode",
-      "Long-range precision",
-      "Heavy-duty build"
-    ]
-  },
-  {
-    id: 5,
-    name: "Auto-Suction Elite",
-    price: 35.98,
-    img: "Sd325e9aae6d942babf9045865320f9c4w.png_480x480.png",
-    tag: "AUTO FILL",
-    tagType: "",
-    cat: "electric",
-    sold: "New",
-    rating: null,
-    link: "electric+water+guns+adults+automatic+water+suction+squirt",
-    desc: "Dip it in any water source and it auto-fills in seconds. No caps to remove, no funnels needed — just reload and fire.",
-    features: [
-      "Auto-suction refill",
-      "No manual fill",
-      "Any water source",
-      "Ready in seconds"
-    ]
-  },
-  {
-    id: 6,
-    name: "MP5 Electric Blaster",
-    price: 35.98,
-    img: "S53b7d4b0a96c47cfa026e66d4b1714dbT.jpg_480x480q75.jpg",
-    tag: "NEW",
-    tagType: "",
-    cat: "electric",
-    sold: "New",
-    rating: null,
-    link: "MP5+electric+water+gun+toy+long+range+shooting",
-    desc: "MP5 tactical design with an electric motor inside. Looks intense, shoots intense — up to 30ft of soaking power.",
-    features: [
-      "MP5 tactical styling",
-      "Electric motor",
-      "30ft range",
-      "Lightweight frame"
-    ]
-  },
-  {
-    id: 7,
-    name: "Continuous Fire Blaster",
-    price: 25.98,
-    img: "S11b32e25bc354863adc13d5b2b6d3228j.jpg_480x480q75.jpg",
-    tag: "4K+ · 4.9★",
-    tagType: "hot",
-    cat: "electric",
-    sold: "4,000+",
-    rating: 4.9,
-    link: "electric+water+gun+automatic+continuous+firing",
-    desc: "Best value in the electric category — 4,000 sold, 4.9 star average, under $13. Continuous automatic fire that does not stop.",
-    features: [
-      "Non-stop continuous fire",
-      "4.9★ buyer rated",
-      "Best value electric",
-      "4,000 units sold"
-    ]
-  },
-  {
-    id: 8,
-    name: "Adults Suction Blaster",
-    price: 45.98,
-    img: "Sceb1322beac94bc6b163abe7f507ca4dO.jpg_480x480q75.jpg",
-    tag: "NEW",
-    tagType: "",
-    cat: "electric",
-    sold: "New",
-    rating: null,
-    link: "electric+water+guns+adults+powerful+squirt+automatic",
-    desc: "Powerful squirt meets smart suction refill in one adult-sized weapon. Dominate the pool with near-zero downtime.",
-    features: [
-      "Powerful adult squirt",
-      "Auto suction refill",
-      "Minimal downtime",
-      "Ergonomic grip"
-    ]
-  },
-  {
-    id: 9,
-    name: "Full Auto Storage Tank",
-    price: 151.98,
-    img: "S6975fb6bc6fd49c990ecb1509610f17es.jpg_480x480q75.jpg",
-    tag: "PREMIUM",
-    tagType: "dark",
-    cat: "electric",
-    sold: "230+",
-    rating: 4.6,
-    link: "full+electric+automatic+water+storage+gun+portable",
-    desc: "Premium full-electric with an integrated storage tank for extended battles. 230 units sold with a solid 4.6 star rating.",
-    features: [
-      "Integrated storage tank",
-      "Full-auto electric",
-      "Extended battle time",
-      "4.6★ premium rated"
-    ]
-  },
-  {
-    id: 10,
-    name: "IPX7 Pool Blaster",
-    price: 129.98,
-    img: "Sbd7424b205d54958a9e5ec80de32c82a9.png_480x480.png",
-    tag: "IPX7",
-    tagType: "dark",
-    cat: "electric",
-    sold: "31",
-    rating: 4.2,
-    link: "summer+electric+water+gun+IPX7+waterproof+pulse",
-    desc: "IPX7 waterproof rated so you can take it fully underwater. High pressure, garden and pool certified, auto-pulse firing.",
-    features: [
-      "IPX7 waterproof body",
-      "Fully submersible",
-      "Auto-pulse firing",
-      "Garden & pool safe"
-    ]
-  },
-  {
-    id: 11,
-    name: "2026 LED Electric",
-    price: 85.98,
-    img: "S5872f39d4b6b44a5a227a88c2a64aeadF.jpg_480x480q75.jpg",
-    tag: "2026 MODEL",
-    tagType: "hot",
-    cat: "electric",
-    sold: "9",
-    rating: 5,
-    link: "2026+summer+electric+water+gun+LED+light+high+capacity",
-    desc: "2026 latest model with built-in LED lighting and high-capacity tank. Fresh drop, 5 star reviews out of the gate.",
-    features: [
-      "2026 latest model",
-      "Built-in LED lights",
-      "High-capacity tank",
-      "5★ perfect score"
-    ]
-  },
-  {
-    id: 12,
-    name: "Pulse Auto Burst",
-    price: 55.98,
-    img: "S244c66bfc7a5400d99b07f471241e806U.jpg_480x480q75.jpg",
-    tag: "NEW",
-    tagType: "",
-    cat: "electric",
-    sold: "30",
-    rating: null,
-    link: "pulse+electric+water+gun+automatic+absorption+burst",
-    desc: "Pulse-fire mechanism delivers bursts with split-second intervals for maximum chaos. Auto absorption keeps you in the fight.",
-    features: [
-      "Pulse burst firing",
-      "Auto absorption",
-      "High-speed stream",
-      "Black tech design"
-    ]
-  },
-  {
-    id: 13,
-    name: "Pool Party Electric",
-    price: 115.98,
-    img: "Sdaf07b8910174148b53b4ff533185e68G.jpg_480x480q75.jpg",
-    tag: "POOL PARTY",
-    tagType: "hot",
-    cat: "electric",
-    sold: "105",
-    rating: 4,
-    link: "summer+electric+water+gun+pool+fight+induction",
-    desc: "Built for pool parties — auto induction absorbs directly from the water you are standing in. 105 sold, 4 star rating.",
-    features: [
-      "Auto pool induction",
-      "Party-sized capacity",
-      "105 units sold",
-      "Pool & beach certified"
-    ]
-  },
-  {
-    id: 14,
-    name: "Long-Range LED Sniper",
-    price: 199.99,
-    img: "S9c82ca312e0b49be85fe40f5c9ea467aS.jpg_480x480q75.jpg",
-    tag: "ELITE",
-    tagType: "dark",
-    cat: "electric",
-    sold: "2",
-    rating: null,
-    link: "long+range+electric+water+blaster+LED+high+pressure+automatic",
-    desc: "The top of the arsenal. Long-range LED-equipped fully automatic blaster for players who want to outrange everyone else.",
-    features: [
-      "Maximum range design",
-      "Full LED lighting",
-      "Fully automatic",
-      "Elite build quality"
-    ]
-  },
-  {
-    id: 15,
-    name: "M1911 Water Pistol",
-    price: 25.98,
-    img: "S525293aa781046beb3f7dd26f132bbd5i.jpg_480x480q75.jpg",
-    tag: "100K+ SOLD",
-    tagType: "hot",
-    cat: "pistol",
-    sold: "100,000+",
-    rating: 4.5,
-    link: "M1911+water+guns+pistol+toy+squirt",
-    desc: "100,000 units sold. The most proven water pistol in the game — classic M1911 design, lightweight, strong squirt every time.",
-    features: [
-      "100,000+ units sold",
-      "Classic M1911 design",
-      "Lightweight grip",
-      "Consistent squirt range"
-    ]
-  },
-  {
-    id: 16,
-    name: "Recoil Sensor Blaster",
-    price: 25.98,
-    img: "Saff9a05eef09438fba073243e6502b13i.jpg_480x480q75.jpg",
-    tag: "2K+ · 4.9★",
-    tagType: "hot",
-    cat: "pistol",
-    sold: "2,000+",
-    rating: 4.9,
-    link: "simulated+firing+recoil+electric+water+gun+sensor",
-    desc: "Feels like the real thing. Electric motor simulates actual recoil on every shot — 2,000 sold, 4.9 star rating.",
-    features: [
-      "Simulated recoil motor",
-      "Auto sensor trigger",
-      "2,000+ sold",
-      "4.9★ verified"
-    ]
-  },
-  {
-    id: 17,
-    name: "Desert Eagle Pistol",
-    price: 25.98,
-    img: "Sb28843d198364ba8a91eaef8817f6e81P.jpg_480x480q75.jpg",
-    tag: "HOT",
-    tagType: "hot",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "hot+mini+desert+eagle+mechanical+water+gun",
-    desc: "Mini Desert Eagle with authentic styling and mechanical trigger action. Maximum intimidation, maximum soak.",
-    features: [
-      "Desert Eagle design",
-      "Mechanical trigger",
-      "Compact mini size",
-      "Strong squirt pressure"
-    ]
-  },
-  {
-    id: 18,
-    name: "Space Energy Blaster",
-    price: 31.98,
-    img: "S55b9a8cb99cf4b118807d2d1c98acdcaN.jpg_480x480q75.jpg",
-    tag: "UNIQUE",
-    tagType: "",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "space+electric+water+gun+energy+ring",
-    desc: "Future-tech energy ring design with an electric water mechanism inside. Unique look guaranteed to turn heads at the pool.",
-    features: [
-      "Space-age energy ring design",
-      "Electric water mechanism",
-      "Unique styling",
-      "Conversation starter"
-    ]
-  },
-  {
-    id: 19,
-    name: "Rechargeable Revolver",
-    price: 35.98,
-    img: "Se37e59820fbc4c858726919e27feb82d4.jpg_480x480q75.jpg",
-    tag: "RECHARGEABLE",
-    tagType: "",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "upgraded+rechargeable+electric+revolver+water+gun",
-    desc: "Upgraded rechargeable battery revolver — charge it once, soak all day. Classic revolver aesthetics with modern electric power.",
-    features: [
-      "Rechargeable battery",
-      "Revolver cylinder design",
-      "Modern electric motor",
-      "All-day run time"
-    ]
-  },
-  {
-    id: 20,
-    name: "Classic Squirt Pistol",
-    price: 23.98,
-    img: "S76a6eedf383d445ca27142726023a6934.jpg_480x480q75.jpg",
-    tag: "VALUE",
-    tagType: "",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "water+guns+pistol+toy+squirt+guns+summer",
-    desc: "No frills, pure soaking power. The classic water pistol does exactly what it says and at the best price in the catalog.",
-    features: [
-      "Simple trigger pull",
-      "Lightweight design",
-      "Best value price",
-      "Reliable squirt stream"
-    ]
-  },
-  {
-    id: 21,
-    name: "Mini Kids Pistol",
-    price: 23.98,
-    img: "S4e80c368d87a42c0b90574426206726em.jpg_480x480q75.jpg",
-    tag: "KIDS",
-    tagType: "",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "kids+mechanical+continuous+firing+water+gun+pistol",
-    desc: "Perfectly sized for smaller hands, delivers continuous rapid-fire. The go-to starter pistol for every young water warrior.",
-    features: [
-      "Kids-sized grip",
-      "Continuous fire action",
-      "Lightweight & safe",
-      "Easy to reload"
-    ]
-  },
-  {
-    id: 22,
-    name: "Electric Squirt Pistol",
-    price: 35.98,
-    img: "Sb1622e4beaa64754966d34d4f247d69dK.jpg_480x480q75.jpg",
-    tag: "ELECTRIC",
-    tagType: "",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "electric+water+gun+automatic+squirt+blaster+soaker",
-    desc: "Electric soaker in a pistol format — the best of both worlds. Compact size, electric firing, serious range for a sidearm.",
-    features: [
-      "Electric auto-fire",
-      "Pistol compact format",
-      "Built-in soaker mechanism",
-      "Serious range for size"
-    ]
-  },
-  {
-    id: 23,
-    name: "Reverse Spray Pistol",
-    price: 23.98,
-    img: "S2c83d2a8115045e58dad9bc7e4c19291o.jpg_480x480q75.jpg",
-    tag: "PRANK",
-    tagType: "",
-    cat: "pistol",
-    sold: "New",
-    rating: null,
-    link: "novelty+reverse+spray+water+gun+prank+toy",
-    desc: "Prank pistol with a reverse spray nozzle — it looks like it shoots forward but surprises the shooter. Party gold.",
-    features: [
-      "Reverse spray trick",
-      "Double nozzle design",
-      "Party & prank ready",
-      "Lightweight pistol"
-    ]
-  },
-  {
-    id: 24,
-    name: "Adults Squirt Gun Pro",
-    price: 57.98,
-    img: "S27424623101a47449be3970a44abf637l.jpg_480x480q75.jpg",
-    tag: "3K+ SOLD",
-    tagType: "hot",
-    cat: "pistol",
-    sold: "3,000+",
-    rating: 4.4,
-    link: "electric+water+guns+adults+powerful+squirt+automatic+suction",
-    desc: "3,000 units sold adult electric squirt gun with powerful auto-suction. Built bigger, shoots farther, lasts longer.",
-    features: [
-      "3,000+ sold",
-      "Auto suction fill",
-      "Powerful adult stream",
-      "4.4★ buyer rating"
-    ]
-  },
-  {
-    id: 25,
-    name: "M1911 Gold Edition",
-    price: 27.98,
-    img: "Se5d1d388c5ef4aeea90e07cbff2da255k.jpg_480x480q75.jpg",
-    tag: "GIFT PICK",
-    tagType: "",
-    cat: "pistol",
-    sold: "100,000+",
-    rating: 4.5,
-    link: "M1911+water+guns+pistol+toy+squirt+guns+gold",
-    desc: "The gold edition M1911 — same proven design as the #1 bestseller with premium gold styling. Perfect gift for any age.",
-    features: [
-      "Gold premium finish",
-      "Same 100K+ proven design",
-      "Perfect gift option",
-      "4.5★ verified"
-    ]
-  },
-  {
-    id: 26,
-    name: "Gatling Spin Blaster",
-    price: 89.98,
-    img: "Scd1edfdf73c74ec9974c50925fa46ab1Y.jpg_480x480q75.jpg",
-    tag: "5★ RATED",
-    tagType: "hot",
-    cat: "pistol",
-    sold: "8",
-    rating: 5,
-    link: "adult+pool+party+electric+gatling+water+gun",
-    desc: "Electric Gatling-style spinning water gun for adults. 5-star perfect rated — the most fun you can have at any pool party.",
-    features: [
-      "Gatling rotating barrel",
-      "Electric spin mechanism",
-      "5★ perfect rating",
-      "Adult pool party hero"
-    ]
-  },
-  {
-    id: 27,
-    name: "Kids Backpack 4.9★",
-    price: 31.98,
-    img: "S2c48552f7b844787a1df5a67d56b5ab8Z.jpg_480x480q75.jpg",
-    tag: "426 · 4.9★",
-    tagType: "hot",
-    cat: "backpack",
-    sold: "426",
-    rating: 4.9,
-    link: "children+water+gun+backpack+splashing+toys",
-    desc: "426 sold, 4.9 star rating — the best-rated backpack soaker in the arsenal. Kids wear it, aim the attached gun, and never run dry.",
-    features: [
-      "4.9★ top rated",
-      "Worn backpack tank",
-      "426 proven sales",
-      "Kids-comfortable fit"
-    ]
-  },
-  {
-    id: 28,
-    name: "Fireman Backpack XL",
-    price: 47.98,
-    img: "Sf1289e8f7e9146799ff7fec0231edc79T.jpg_480x480q75.jpg",
-    tag: "500+ SOLD",
-    tagType: "hot",
-    cat: "backpack",
-    sold: "500+",
-    rating: 4.6,
-    link: "fireman+backpack+water+gun+large+capacity",
-    desc: "Fireman-style XL backpack with large capacity tank and 4.6-star rating. 500+ units sold — a proven crowd favorite.",
-    features: [
-      "500+ units sold",
-      "XL large tank",
-      "Fireman design",
-      "4.6★ buyer rating"
-    ]
-  },
-  {
-    id: 29,
-    name: "Cartoon Backpack Blaster",
-    price: 21.98,
-    img: "S1d7967401e7a46b292b791794ae70784N.jpg_480x480q75.jpg",
-    tag: "218 SOLD",
-    tagType: "",
-    cat: "backpack",
-    sold: "218",
-    rating: 4.7,
-    link: "cartoon+water+guns+toy+summer+kids+outdoor+beach",
-    desc: "Colorful cartoon backpack blaster loved by kids everywhere. 218 sold, 4.7 stars, and the brightest thing at the beach.",
-    features: [
-      "Fun cartoon design",
-      "218 sold · 4.7★",
-      "Bright vivid colors",
-      "Beach & outdoor ready"
-    ]
-  },
-  {
-    id: 30,
-    name: "Revolver Backpack",
-    price: 25.98,
-    img: "S2b60e33962c24a918e6b1093143b4c41U.jpg_480x480q75.jpg",
-    tag: "ELECTRIC",
-    tagType: "",
-    cat: "backpack",
-    sold: "49",
-    rating: 4,
-    link: "revolver+electric+automatic+water+gun+backpack",
-    desc: "Revolver-styled electric pistol connected to a wearable backpack tank. Hands-free hydration, trigger-ready at all times.",
-    features: [
-      "Revolver electric pistol",
-      "Wearable backpack tank",
-      "Hands-free water supply",
-      "Electric motor"
-    ]
-  },
-  {
-    id: 31,
-    name: "15L Tank Backpack",
-    price: 87.98,
-    img: "Sdaa9467f4ec641b19192fadadcf6846fZ.jpg_480x480q75.jpg",
-    tag: "15L TANK",
-    tagType: "dark",
-    cat: "backpack",
-    sold: "9",
-    rating: null,
-    link: "15L+large+capacity+backpack+water+gun+toy",
-    desc: "Massive 15-liter tank backpack for players who never want to stop and refill. Carry the water source on your back.",
-    features: [
-      "Massive 15L tank",
-      "Never-stop-refilling",
-      "Heavy-duty straps",
-      "Maximum ammo capacity"
-    ]
-  },
-  {
-    id: 32,
-    name: "15M Range Backpack",
-    price: 95.98,
-    img: "S5b03cef207b34d6cb5eb66c6a1cff001d.jpg_480x480q75.jpg",
-    tag: "5★ RATED",
-    tagType: "hot",
-    cat: "backpack",
-    sold: "8",
-    rating: 5,
-    link: "summer+water+gun+15+meter+range+backpack",
-    desc: "5-star rated backpack soaker with a 15-meter range. Outrange every opponent — then laugh while they try to reach you.",
-    features: [
-      "15m / 50ft range",
-      "Perfect 5★ rating",
-      "Backpack supply tank",
-      "Outrange everything"
-    ]
-  },
-  {
-    id: 33,
-    name: "Backpack 2000ml",
-    price: 25.98,
-    img: "S66b09dfafc274d4aa7811b9a51b167bbM.jpg_480x480q75.jpg",
-    tag: "2L TANK",
-    tagType: "",
-    cat: "backpack",
-    sold: "5",
-    rating: null,
-    link: "children+backpack+2000ml+water+gun+pull+type",
-    desc: "2-liter pull-type backpack soaker at the best entry price. Simple, reliable, and great for first-time backpack buyers.",
-    features: [
-      "2L / 2000ml tank",
-      "Pull-type refill",
-      "Best entry price",
-      "Simple & reliable"
-    ]
-  },
-  {
-    id: 34,
-    name: "Fireman Backpack Classic",
-    price: 31.98,
-    img: "Sdb47cf29c9d848b49a5c78bcef362450v.png_480x480.png",
-    tag: "FIREMAN",
-    tagType: "",
-    cat: "backpack",
-    sold: "4",
-    rating: null,
-    link: "large+capacity+water+gun+fireman+backpack",
-    desc: "Classic fireman backpack design — perfect for role-playing and serious soaking. Larger tank than most at this price.",
-    features: [
-      "Classic fireman design",
-      "Large tank for price",
-      "Role-play ready",
-      "Easy back straps"
-    ]
-  },
-  {
-    id: 35,
-    name: "Kids Outdoor Backpack",
-    price: 25.98,
-    img: "S86a52764f64c43759ce7617f2965d0bb9.jpg_480x480q75.jpg",
-    tag: "KIDS",
-    tagType: "",
-    cat: "backpack",
-    sold: "19",
-    rating: null,
-    link: "children+backpack+water+gun+outdoor+fight+games",
-    desc: "Kids outdoor backpack water gun built for garden battles and summer fight games. Durable, light, easy to refill.",
-    features: [
-      "Kids outdoor design",
-      "Garden battle ready",
-      "Light & durable",
-      "Quick refill system"
-    ]
-  },
-  {
-    id: 36,
-    name: "Fireman Pistol Combo",
-    price: 21.98,
-    img: "Se1ae86a65da1419695de9cf7f4b5a41d5.jpg_480x480q75.jpg",
-    tag: "COMBO SET",
-    tagType: "",
-    cat: "backpack",
-    sold: "80",
-    rating: 3.7,
-    link: "children+fireman+backpack+water+gun+pistol+combo",
-    desc: "Backpack plus pistol combo set in one box — 80 sold. Budget-friendly full kit for getting kids started fast.",
-    features: [
-      "Backpack + pistol combo",
-      "80 units sold",
-      "Full kit in one box",
-      "Budget-friendly bundle"
-    ]
-  },
-  {
-    id: 37,
-    name: "12-Pack Squirt Set",
-    price: 39.98,
-    img: "S4ba3b55cdf284ea49c355f04ac4a7f14M.jpg_480x480q75.jpg",
-    tag: "12 PACK",
-    tagType: "hot",
-    cat: "bundle",
-    sold: "New",
-    rating: null,
-    link: "12+pack+water+guns+super+blaster+soaker+foam+squirt",
-    desc: "12 squirt guns in one pack — equip an entire party without thinking twice. Foam grip, super soaker design, battle-ready instantly.",
-    features: [
-      "12 guns in one box",
-      "Foam grip handles",
-      "Party-ready instantly",
-      "All ages fun"
-    ]
-  },
-  {
-    id: 38,
-    name: "9-Pack Battle Blasters",
-    price: 55.98,
-    img: "S885e7ff17c0c47a7bfe1b0bbf24a541fs.jpg_480x480q75.jpg",
-    tag: "9 PACK",
-    tagType: "hot",
-    cat: "bundle",
-    sold: "New",
-    rating: null,
-    link: "9+pack+water+guns+kids+adults+super+soakers",
-    desc: "9 super soakers, one box, zero arguments about who gets a gun. Perfect for BBQs, camps, and summer parties.",
-    features: [
-      "9 blasters included",
-      "For kids & adults",
-      "BBQ & camp ready",
-      "Value multi-pack"
-    ]
-  },
-  {
-    id: 39,
-    name: "18-Piece Battle Kit",
-    price: 71.98,
-    img: "S15ff2f7b51a747f7ac767857a1cb88d4B.jpg_480x480q75.jpg",
-    tag: "18 PIECE",
-    tagType: "dark",
-    cat: "bundle",
-    sold: "1",
-    rating: null,
-    link: "JOYFY+18+pcs+water+gun+set+summer",
-    desc: "18-piece full battle kit at 16.5 inches each — the ultimate group summer set. Arm your whole crew in one order.",
-    features: [
-      "18 guns total",
-      "16.5\" each blaster",
-      "Full crew ready",
-      "Best group value"
-    ]
-  },
-  {
-    id: 40,
-    name: "40Ft Super Soaker",
-    price: 27.98,
-    img: "Se0dbe8e010e140c88f3fdd20a321b6691.png_480x480.png",
-    tag: "40FT RANGE",
-    tagType: "",
-    cat: "bundle",
-    sold: "6",
-    rating: null,
-    link: "super+water+soaker+blaster+squirt+guns+40ft",
-    desc: "40-foot range single soaker. When you want to soak someone who is actually far away — this is the answer.",
-    features: [
-      "40ft shooting range",
-      "Super soaker design",
-      "Long-range champion",
-      "Lightweight carry"
-    ]
-  },
-  {
-    id: 41,
-    name: "Rechargeable Soaker Set",
-    price: 25.98,
-    img: "Sa38faa281f5d422fb9634aa510cebefdH.jpg_480x480q75.jpg",
-    tag: "USB CHARGE",
-    tagType: "",
-    cat: "bundle",
-    sold: "New",
-    rating: null,
-    link: "super+soaker+battery+rechargeable+high+pressure+automatic",
-    desc: "USB rechargeable battery soaker — charge it like your phone, fire it all day. No AA batteries ever needed.",
-    features: [
-      "USB rechargeable",
-      "No batteries needed",
-      "High pressure output",
-      "Charge & fire all day"
-    ]
-  },
-  {
-    id: 42,
-    name: "Electric Pulse Cannon",
-    price: 77.98,
-    img: "S7ada2cbf95ff4f8dadfcb26a9d9fc413O.jpg_480x480q75.jpg",
-    tag: "LONG RANGE",
-    tagType: "dark",
-    cat: "bundle",
-    sold: "2",
-    rating: null,
-    link: "electric+pulse+water+gun+long+distance+large+capacity",
-    desc: "Maximum range electric pulse cannon with XL reservoir. Built for players who want to dominate from distance.",
-    features: [
-      "Maximum range design",
-      "Pulse fire mechanism",
-      "XL water reservoir",
-      "Distance domination"
-    ]
-  },
-  {
-    id: 43,
-    name: "Fast-Fill 700ml Kit",
-    price: 75.98,
-    img: "S762302adce344bdeabde5d04c34921267.jpg_480x480q75.jpg",
-    tag: "FAST FILL",
-    tagType: "",
-    cat: "bundle",
-    sold: "1",
-    rating: null,
-    link: "fast+fill+water+blaster+700ml+capacity",
-    desc: "700ml blaster with a fast-fill port system — zero fumbling, zero wasted time. Reload faster than your opponent can blink.",
-    features: [
-      "Fast-fill port system",
-      "700ml capacity",
-      "Zero-fumble reload",
-      "Quick trigger response"
-    ]
-  },
-  {
-    id: 44,
-    name: "Adults Electric XL Set",
-    price: 95.98,
-    img: "S3f78b24e961548f984863dcd32c177cek.jpg_480x480q75.jpg",
-    tag: "XL POWER",
-    tagType: "dark",
-    cat: "bundle",
-    sold: "1",
-    rating: null,
-    link: "electric+water+guns+adults+powerful+squirt+large",
-    desc: "Extra-large adult electric water gun set — maximum power, maximum range, built to outperform everything else at the party.",
-    features: [
-      "XL adult size",
-      "Maximum electric power",
-      "Full adult range",
-      "Built to dominate"
-    ]
-  },
-  {
-    id: 45,
-    name: "Pool Party Gatling Set",
-    price: 135.98,
-    img: "S6b3bf5aa8c1a44c9abffbbbabccbbde0v.jpg_480x480q75.jpg",
-    tag: "PARTY HIT",
-    tagType: "hot",
-    cat: "bundle",
-    sold: "1",
-    rating: null,
-    link: "adult+pool+party+electric+gatling+water+gun+set",
-    desc: "Electric Gatling gun pool party set — multi-barrel rotating blaster that makes you the undisputed king of every BBQ.",
-    features: [
-      "Multi-barrel Gatling",
-      "Electric rotation",
-      "Pool party centerpiece",
-      "Ultimate party weapon"
-    ]
-  },
-  {
-    id: 46,
-    name: "Summer Battle Bundle",
-    price: 43.98,
-    img: "S4ba3b55cdf284ea49c355f04ac4a7f14M.jpg_480x480q75.jpg",
-    tag: "BUNDLE",
-    tagType: "",
-    cat: "bundle",
-    sold: "New",
-    rating: null,
-    link: "water+gun+battle+pack+blaster+set+summer",
-    desc: "Summer battle bundle with multiple blasters, fill adapters, and ready-to-use accessories. Everything in one drop.",
-    features: [
-      "Multiple blasters",
-      "Fill adapters included",
-      "Battle-ready accessories",
-      "One bundle drop"
-    ]
-  },
-  {
-    id: 47,
-    name: "Kids Electric Soaker Set",
-    price: 79.98,
-    img: "Sb3e29e8bd49244f9be870962f346b1e8Q.jpg_480x480q75.jpg",
-    tag: "900+ SOLD",
-    tagType: "hot",
-    cat: "kids",
-    sold: "900+",
-    rating: 4.5,
-    link: "children+electric+water+gun+wholesale+automatic+soaker",
-    desc: "900 sold kids electric auto-soaker with a large tank and 4.5 star rating. Non-stop summer fun sized right for younger players.",
-    features: [
-      "900+ units sold",
-      "Auto electric soak",
-      "Large kid-sized tank",
-      "4.5★ verified"
-    ]
-  },
-  {
-    id: 48,
-    name: "Kids Mini Blaster",
-    price: 23.98,
-    img: "S85c4f4e31ec34d1083e1624613635954z.jpg_480x480q75.jpg",
-    tag: "KIDS",
-    tagType: "",
-    cat: "kids",
-    sold: "New",
-    rating: null,
-    link: "kids+water+gun+high+pressure+mini+charging",
-    desc: "High-pressure mini blaster sized for small hands. Compact, colorful, and delivers a surprisingly strong burst for its size.",
-    features: [
-      "Small hands design",
-      "High-pressure output",
-      "Compact colorful build",
-      "Strong burst for size"
-    ]
-  },
-  {
-    id: 49,
-    name: "Kids High Pressure Fun",
-    price: 41.98,
-    img: "S3d816ceaee774c3a8b3259938c9f7311Y.jpg_480x480q75.jpg",
-    tag: "4K+ SOLD",
-    tagType: "hot",
-    cat: "kids",
-    sold: "4,000+",
-    rating: 4.8,
-    link: "children+high+pressure+electric+water+gun+summer",
-    desc: "4,000+ sold kids gun with high-pressure output and 4.8 star rating. One of the most trusted children's water guns available.",
-    features: [
-      "4,000+ sold",
-      "High pressure output",
-      "4.8★ top kids rating",
-      "Summer beach certified"
-    ]
-  },
-  {
-    id: 50,
-    name: "Kids Cartoon Blaster",
-    price: 21.98,
-    img: "S1d7967401e7a46b292b791794ae70784N.jpg_480x480q75.jpg",
-    tag: "FUN DESIGN",
-    tagType: "",
-    cat: "kids",
-    sold: "218",
-    rating: 4.7,
-    link: "cartoon+water+guns+toy+summer+kids+outdoor",
-    desc: "The most colorful gun in the catalog. Cartoon design kids love, 218 sold, 4.7 stars, and the best vibes at any beach.",
-    features: [
-      "Cartoon fun design",
-      "218 sold · 4.7★",
-      "Bright eye-catching colors",
-      "All ages outdoor fun"
-    ]
-  },
-  {
-    id: 51,
-    name: "Kids Fireman Backpack",
-    price: 21.98,
-    img: "Se1ae86a65da1419695de9cf7f4b5a41d5.jpg_480x480q75.jpg",
-    tag: "FIREMAN",
-    tagType: "",
-    cat: "kids",
-    sold: "80",
-    rating: 3.7,
-    link: "children+fireman+backpack+water+gun",
-    desc: "Kids fireman role-play backpack gun — 80 sold. Perfect for imaginative outdoor play and budget-friendly gift giving.",
-    features: [
-      "Fireman role-play",
-      "80 units sold",
-      "Budget gift option",
-      "Outdoor play ready"
-    ]
-  },
-  {
-    id: 53,
-    name: "Kids Mini Pistol Pack",
-    price: 23.98,
-    img: "S4e80c368d87a42c0b90574426206726em.jpg_480x480q75.jpg",
-    tag: "VALUE",
-    tagType: "",
-    cat: "kids",
-    sold: "New",
-    rating: null,
-    link: "kids+mechanical+water+gun+pistol+mini",
-    desc: "Mini mechanical pistol pack for kids — simple to use, easy to reload, and the perfect first water gun for any age.",
-    features: [
-      "Mini compact size",
-      "Mechanical trigger",
-      "Easy kids reload",
-      "Best first water gun"
-    ]
-  },
-  {
-    id: 54,
-    name: "Kids 2L Backpack",
-    price: 25.98,
-    img: "S66b09dfafc274d4aa7811b9a51b167bbM.jpg_480x480q75.jpg",
-    tag: "2L TANK",
-    tagType: "",
-    cat: "kids",
-    sold: "5",
-    rating: null,
-    link: "children+backpack+2000ml+water+gun",
-    desc: "2-liter kids backpack soaker designed for extended outdoor battles. More water, more fun, less stops to refill.",
-    features: [
-      "2L capacity",
-      "Extended battle time",
-      "Kids back straps",
-      "Less refill stops"
-    ]
-  },
-  {
-    id: 55,
-    name: "Kids Summer Fight Set",
-    price: 41.98,
-    img: "S3d816ceaee774c3a8b3259938c9f7311Y.jpg_480x480q75.jpg",
-    tag: "SUMMER SET",
-    tagType: "hot",
-    cat: "kids",
-    sold: "4,000+",
-    rating: 4.8,
-    link: "children+water+gun+summer+outdoor+beach+pool+fight",
-    desc: "The complete kids summer fight set — trusted by 4,000+ buyers, rated 4.8 stars. Pool, beach, and garden all covered.",
-    features: [
-      "4,000+ sold",
-      "4.8★ verified",
-      "Pool beach & garden",
-      "Complete fight set"
-    ]
-  },
-  {
-    id: 56,
-    name: "Kids Outdoor Combat",
-    price: 25.98,
-    img: "S86a52764f64c43759ce7617f2965d0bb9.jpg_480x480q75.jpg",
-    tag: "COMBAT",
-    tagType: "",
-    cat: "kids",
-    sold: "19",
-    rating: null,
-    link: "children+backpack+water+gun+outdoor+fight+games",
-    desc: "Outdoor combat set for active kids who want to run, dodge, and soak. Lightweight and built to survive every game.",
-    features: [
-      "Outdoor combat design",
-      "Lightweight & durable",
-      "Run and gun ready",
-      "Survives active play"
-    ]
-  },
-  {
-    id: 57,
-    name: "Kids Rechargeable Blaster",
-    price: 25.98,
-    img: "Sa38faa281f5d422fb9634aa510cebefdH.jpg_480x480q75.jpg",
-    tag: "RECHARGE",
-    tagType: "",
-    cat: "kids",
-    sold: "New",
-    rating: null,
-    link: "kids+rechargeable+water+gun+super+soaker",
-    desc: "Kids rechargeable water blaster — teach them to plug it in, charge up, and fire. No more begging for batteries at the store.",
-    features: [
-      "Kid rechargeable design",
-      "No battery runs",
-      "Plug and play",
-      "Parent-approved tech"
-    ]
-  },
-  {
-    id: 58,
-    name: "Kids Party Battle Set",
-    price: 55.98,
-    img: "S885e7ff17c0c47a7bfe1b0bbf24a541fs.jpg_480x480q75.jpg",
-    tag: "PARTY SET",
-    tagType: "hot",
-    cat: "kids",
-    sold: "New",
-    rating: null,
-    link: "kids+water+gun+party+battle+set+summer",
-    desc: "Multi-blaster kids party battle set — buy one box and every kid at the party is armed and dangerous. Zero argument, all fun.",
-    features: [
-      "Multiple blasters in box",
-      "Every kid armed",
-      "Zero party arguments",
-      "Instant battle ready"
-    ]
-  },
-  {
-    id: 59,
-    name: "Kids 12-Pack Fun Set",
-    price: 39.98,
-    img: "S4ba3b55cdf284ea49c355f04ac4a7f14M.jpg_480x480q75.jpg",
-    tag: "12 PACK",
-    tagType: "hot",
-    cat: "kids",
-    sold: "New",
-    rating: null,
-    link: "children+water+gun+12+pack+summer+outdoor+fun",
-    desc: "12-pack kids set — enough guns for the whole neighborhood. Summer outdoor fun at a price every parent can say yes to.",
-    features: [
-      "12 guns for kids",
-      "Whole neighborhood ready",
-      "Parent-friendly price",
-      "Summer outdoor set"
-    ]
-  }
+
+  // ── SPINNERS ──────────────────────────────────────────────────────────────
+
+  { id:0,  vid:47320853545091, cat:'spinner', name:'Tri-Blade Metal Spinner',       price:9.99,  img:'', tag:'BESTSELLER', tagType:'hot',  sold:'25,000+', rating:4.8, link:'tri+blade+metal+fidget+spinner',
+    desc:'The original. Smooth ceramic bearing, precision-balanced tri-blade that spins 3+ minutes on a single flick. Zero wobble, pure satisfaction.',
+    features:['R188 ceramic bearing','3-min+ spin time','Precision balanced','Brushed metal finish'] },
+
+  { id:1,  vid:47320854200451, cat:'spinner', name:'Carbon Fiber Pro Spinner',      price:19.99, img:'', tag:'NEW', tagType:'dark', sold:'8,000+', rating:4.9, link:'carbon+fiber+fidget+spinner+professional',
+    desc:'Aerospace-grade carbon fiber — 28g featherlight but rock-solid. Flagship-quality feel for under $20.',
+    features:['Aerospace carbon fiber','28g ultralight','R188 steel bearing','Matte black finish'] },
+
+  { id:2,  vid:47320866357379, cat:'spinner', name:'LED Rainbow Glow Spinner',      price:10.99, img:'', tag:'HOT', tagType:'hot', sold:'15,000+', rating:4.7, link:'LED+rainbow+light+fidget+spinner+glow',
+    desc:'RGB LEDs light up the blades in a hypnotic rainbow trail when spinning. Day or night, this one turns heads.',
+    features:['7-colour RGB LEDs','Rechargeable via USB','Long spin time','Light show mode'] },
+
+  { id:3,  vid:47320866390147, cat:'spinner', name:'Glow-in-the-Dark Phantom',      price:8.99,  img:'', tag:'POPULAR', tagType:'', sold:'12,000+', rating:4.6, link:'glow+dark+fidget+spinner+phantom',
+    desc:'Charge it under any light source, then watch it glow bright green in the dark. Quiet, smooth, eerie.',
+    features:['Glow phosphor body','Silent ceramic bearing','Compact tri-blade','No batteries needed'] },
+
+  { id:4,  vid:47320866422915, cat:'spinner', name:'Titanium EDC Precision Spinner', price:44.99, img:'', tag:'PREMIUM', tagType:'dark', sold:'3,200+', rating:4.9, link:'titanium+EDC+precision+fidget+spinner',
+    desc:'CNC-machined Grade-5 titanium. The kind of spinner that gets passed down. Unmatched spin time and feel.',
+    features:['Grade-5 titanium','5-min+ spin time','Concave buttons','Comes in gift box'] },
+
+  { id:5,  vid:47320867307651, cat:'spinner', name:'Copper Galaxy Spinner',         price:29.99, img:'', tag:'LIMITED', tagType:'dark', sold:'2,100+', rating:4.8, link:'copper+galaxy+fidget+spinner+EDC',
+    desc:'Solid copper body that develops a natural patina over time — every spinner becomes uniquely yours.',
+    features:['Solid copper build','Develops unique patina','Hybrid bearing','Weighted for long spin'] },
+
+  { id:6,  vid:47320867340419, cat:'spinner', name:'Mini Stealth Pocket Spinner',   price:6.99,  img:'', tag:'VALUE', tagType:'',   sold:'18,000+', rating:4.5, link:'mini+pocket+fidget+spinner+compact',
+    desc:'Fits flat in any pocket. Ultra-compact design, quiet bearing — the one you carry every day without thinking about it.',
+    features:['Pocket-flat profile','Silent bearing','Lightweight alloy','Single-button click start'] },
+
+  { id:7,  vid:47320867373187, cat:'spinner', name:'Skull Chrome Spinner',          price:9.99,  img:'', tag:'TRENDING', tagType:'hot', sold:'9,400+', rating:4.7, link:'skull+chrome+fidget+spinner+metal',
+    desc:'Death-metal aesthetics meet butter-smooth spins. Chrome-plated skull design that looks as good as it feels.',
+    features:['Chrome plated finish','Skull blade design','Steel bearing','Satisfying weight'] },
+
+  { id:8,  vid:47320867405955, cat:'spinner', name:'Stainless Gyro Ball Spinner',   price:16.99, img:'', tag:'', tagType:'', sold:'5,600+', rating:4.7, link:'stainless+steel+gyro+ball+fidget+spinner',
+    desc:'Dual-ring gyroscope design — the inner ring spins independently in every direction for a mesmerising 3D effect.',
+    features:['3D gyroscope motion','316 stainless steel','Silent dual bearing','Desktop display base'] },
+
+  { id:9,  vid:47320867438723, cat:'spinner', name:'Ceramic Hybrid Precision',      price:14.99, img:'', tag:'SMOOTH', tagType:'', sold:'7,200+', rating:4.8, link:'ceramic+hybrid+bearing+fidget+spinner',
+    desc:'Hybrid ceramic-steel bearing delivers the smoothest, quietest spin you\'ve ever felt. No buzz, no rattle, pure glide.',
+    features:['Hybrid ceramic-steel','Near-silent operation','4-min spin time','Finger groove buttons'] },
+
+  { id:10, vid:47320867766403, cat:'spinner', name:'Double-Layer Spin Disc',        price:12.99, img:'', tag:'', tagType:'', sold:'4,800+', rating:4.6, link:'double+layer+spin+disc+fidget+toy',
+    desc:'Two spinning plates layered on a single axle — counter-rotate them for an oddly satisfying visual effect.',
+    features:['Counter-rotating layers','Textured grip edges','Compact disc form','Desktop spin trick ready'] },
+
+  { id:11, vid:47320867799171, cat:'spinner', name:'Gold Plated Luxury Spinner',    price:32.99, img:'', tag:'LUXURY', tagType:'dark', sold:'1,800+', rating:4.8, link:'gold+plated+luxury+fidget+spinner+gift',
+    desc:'24K gold-plated finish on a precision brass body. Comes in a velvet-lined box — the perfect gift.',
+    features:['24K gold plating','Gift-ready velvet box','Brass weighted body','Slow-coast bearing'] },
+
+  { id:12, vid:47320868159619, cat:'spinner', name:'Anti-Stress Wing Spinner',      price:6.99,  img:'', tag:'VALUE', tagType:'', sold:'21,000+', rating:4.5, link:'anti+stress+wing+fidget+spinner+anxiety',
+    desc:'Wide flat wings make it feel satisfying in the palm. Great for anxiety relief, stays stable on two fingers.',
+    features:['Wide wing blade design','Palm-stable spin','Stress-relief grip','ABS + steel hybrid'] },
+
+  { id:13, vid:47320868552835, cat:'spinner', name:'Magnetic Orbit Spinner',        price:13.99, img:'', tag:'NEW', tagType:'dark', sold:'3,400+', rating:4.7, link:'magnetic+orbit+fidget+spinner+EDC',
+    desc:'Embedded N52 magnets in the blade tips create a subtle pull-push resistance — every spin feels alive.',
+    features:['N52 embedded magnets','Resistance feedback','Anodised aluminium','Precision-balanced tips'] },
+
+  { id:14, vid:47320869896323, cat:'spinner', name:'Dual-Axis Gyroscope Pro',       price:38.99, img:'', tag:'PRO', tagType:'dark', sold:'1,200+', rating:4.9, link:'dual+axis+gyroscope+fidget+spinner+pro',
+    desc:'Professional-grade dual-axis spinner — independent inner and outer rings for serious fidgeters and desk athletes.',
+    features:['Dual independent axes','Aerospace aluminium','6-min+ spin time','Tilt-proof base stand'] },
+
+  // ── CUBES ──────────────────────────────────────────────────────────────────
+
+  { id:15, vid:47320873468035, cat:'cube', name:'6-Side Click Fidget Cube',         price:5.99,  img:'', tag:'BESTSELLER', tagType:'hot', sold:'35,000+', rating:4.8, link:'6+side+click+fidget+cube+anxiety',
+    desc:'Six different satisfying interactions — click, roll, flip, slide, breathe, spin. The original anxiety cube that started it all.',
+    features:['6 unique actions','Silent click mode','Stress-relief designed','Compact pocket size'] },
+
+  { id:16, vid:47320912625795, cat:'cube', name:'Infinity Fold Magic Cube',         price:9.99,  img:'', tag:'HOT', tagType:'hot', sold:'14,000+', rating:4.7, link:'infinity+fold+magic+cube+fidget',
+    desc:'12-panel hinged cube that folds, flips and transforms endlessly. You can\'t put it down once you start.',
+    features:['12-panel hinge design','Infinite fold patterns','Smooth pivot joints','Satisfying clack sound'] },
+
+  { id:17, vid:47320925372547, cat:'cube', name:'Magnetic Puzzle Cube',             price:16.99, img:'', tag:'NEW', tagType:'dark', sold:'6,400+', rating:4.8, link:'magnetic+puzzle+cube+fidget+toy',
+    desc:'Magnetised panels snap together cleanly and pull apart smoothly. Builds and rebuilds into dozens of shapes.',
+    features:['N35 magnetic panels','Dozens of configurations','No loose pieces','STEM-friendly design'] },
+
+  { id:18, vid:47320917999747, cat:'cube', name:'Gear Clicker Cube',                price:10.99, img:'', tag:'SATISFYING', tagType:'', sold:'9,200+', rating:4.7, link:'gear+clicker+fidget+cube+stress',
+    desc:'Miniature exposed gears that mesh satisfyingly on every side. Watch them turn while you decompress.',
+    features:['Visible gear mechanism','Tactile click feedback','Zinc alloy body','Desktop display worthy'] },
+
+  { id:19, vid:47320918032515, cat:'cube', name:'Mini Metal Anxiety Cube',          price:12.99, img:'', tag:'', tagType:'', sold:'5,800+', rating:4.7, link:'mini+metal+anxiety+fidget+cube+EDC',
+    desc:'All-metal construction makes this cube heavier and more satisfying than plastic competitors. Built to last years.',
+    features:['Full metal body','Weight: 65g','Dual clicker faces','Pocket-carry friendly'] },
+
+  { id:20, vid:47320925405315, cat:'cube', name:'Smooth Press Anti-Stress Cube',    price:6.99,  img:'', tag:'VALUE', tagType:'', sold:'22,000+', rating:4.6, link:'smooth+press+anti+stress+fidget+cube',
+    desc:'Silicone face panels absorb finger pressure and bounce back. Quiet enough for offices, libraries and classrooms.',
+    features:['Soft silicone faces','Near-silent use','6 distinct textures','Washable design'] },
+
+  { id:21, vid:47320919670915, cat:'cube', name:'Rainbow Folding Flex Cube',        price:7.99,  img:'', tag:'HOT', tagType:'hot', sold:'11,000+', rating:4.6, link:'rainbow+folding+flex+fidget+cube',
+    desc:'Colour-blocked panels fold into a rainbow of shapes. A visual fidget as much as a tactile one.',
+    features:['6 vivid colours','200+ fold patterns','Smooth ABS pivots','ADHD / focus aid'] },
+
+  { id:22, vid:47320920457347, cat:'cube', name:'Anti-Anxiety Spinner Cube',        price:9.99,  img:'', tag:'POPULAR', tagType:'', sold:'8,600+', rating:4.7, link:'anti+anxiety+spinner+fidget+cube',
+    desc:'Every face has a mini spinner, roller or clicker built in. Six fidgets in one pocket-sized block.',
+    features:['6 fidget mechanisms','Spinner on 2 faces','Quiet roller bearings','Therapy-grade design'] },
+
+  { id:23, vid:47320921571459, cat:'cube', name:'Quiet Soft-Touch Cube',            price:5.49,  img:'', tag:'VALUE', tagType:'', sold:'16,000+', rating:4.5, link:'quiet+soft+touch+fidget+cube+silent',
+    desc:'Designed specifically for noise-sensitive settings. Matte rubber exterior muffles every click and press.',
+    features:['Fully silent operation','Rubberised matte finish','Lightweight 40g','Great for meetings'] },
+
+  { id:24, vid:47320925438083, cat:'cube', name:'Pro XL Desk Fidget Cube',          price:17.99, img:'', tag:'', tagType:'', sold:'4,200+', rating:4.8, link:'pro+XL+desk+fidget+cube+premium',
+    desc:'50% larger than standard cubes — built for serious desk users. Premium weighted metal core, satisfying resistance.',
+    features:['XL 45mm size','Weighted metal core','6 precision actions','Non-slip base pad'] },
+
+  // ── RINGS ──────────────────────────────────────────────────────────────────
+
+  { id:25, vid:47320925470851, cat:'ring', name:'Magnetic Fidget Rings 5-Pack',     price:6.99,  img:'', tag:'BESTSELLER', tagType:'hot', sold:'28,000+', rating:4.8, link:'magnetic+fidget+rings+5+pack',
+    desc:'Five smooth stainless rings with N52 magnetic tips. Twist, stack, orbit — endlessly satisfying for hands and fingers.',
+    features:['5 rings included','N52 magnetic tips','316L stainless steel','Pouch included'] },
+
+  { id:26, vid:47320925503619, cat:'ring', name:'Spinning Gyro Ring',               price:10.99, img:'', tag:'', tagType:'', sold:'7,400+', rating:4.7, link:'spinning+gyro+ring+fidget',
+    desc:'Outer ring free-spins around an inner band you wear on your finger. Spin it on your hand all day long.',
+    features:['Wearable spinner ring','Free-rotating outer band','316L stainless','Smooth ball bearing'] },
+
+  { id:27, vid:47320955158659, cat:'ring', name:'Warrior Knuckle Ring',             price:7.99,  img:'', tag:'HOT', tagType:'hot', sold:'11,200+', rating:4.7, link:'warrior+knuckle+fidget+ring+metal',
+    desc:'Chunky cast-metal ring with textured detailing. Heavy enough to feel premium, smooth enough for all-day wear.',
+    features:['Cast metal construction','Wide 12mm band','Matte brushed finish','Sizes 6–12 available'] },
+
+  { id:28, vid:47320955420803, cat:'ring', name:'Infinity Loop Band Ring',          price:5.49,  img:'', tag:'VALUE', tagType:'', sold:'19,000+', rating:4.5, link:'infinity+loop+band+ring+fidget',
+    desc:'Minimalist continuous loop design in surgical steel. Spin it, slide it, stack it — subtle fidget for every wrist.',
+    features:['Surgical steel','Minimalist design','Stackable','Hypoallergenic'] },
+
+  { id:29, vid:47320956043395, cat:'ring', name:'Tri-Spin Ring Set (3-Pack)',       price:7.99,  img:'', tag:'', tagType:'', sold:'8,800+', rating:4.6, link:'tri+spin+ring+set+3+pack+fidget',
+    desc:'Three interlocking rings that orbit each other when spun. Mesmerising in motion, clean at rest.',
+    features:['3 interlocking rings','Independent spin axes','Polished silver finish','Gift bag included'] },
+
+  { id:30, vid:47320956960899, cat:'ring', name:'EDC Roller Knuckle Ring',          price:12.99, img:'', tag:'NEW', tagType:'dark', sold:'3,600+', rating:4.8, link:'EDC+roller+knuckle+ring+fidget',
+    desc:'A tiny barrel roller built into the band — you can roll it with your thumb while it sits on your finger. True EDC.',
+    features:['Integrated barrel roller','Titanium-coated steel','EDC carry-ready','Smooth roll action'] },
+
+  { id:31, vid:47320956993667, cat:'ring', name:'Stainless Steel Spin Band',        price:9.99,  img:'', tag:'', tagType:'', sold:'6,200+', rating:4.6, link:'stainless+steel+spin+band+ring+fidget',
+    desc:'Dual-layer band — the outer sleeve free-spins silently around the inner base. Wearable all day, no one notices.',
+    features:['Dual-layer wearable design','Silent spin','High-polish stainless','Unisex sizing'] },
+
+  { id:32, vid:47320957026435, cat:'ring', name:'Magnetic Vortex Ring Set',         price:4.99,  img:'', tag:'VALUE', tagType:'', sold:'24,000+', rating:4.5, link:'magnetic+vortex+ring+set+fidget+cheap',
+    desc:'Budget-friendly 3-ring magnetic set — great starter kit or stocking stuffer. Deceptively satisfying for the price.',
+    features:['3 rings included','Smooth magnetic slide','Nickel-free plating','Portable carry tube'] },
+
+  // ── SENSORY ────────────────────────────────────────────────────────────────
+
+  { id:33, vid:47320957059203, cat:'sensory', name:'Jumbo Pop Bubble Pad',          price:3.99,  img:'', tag:'VALUE', tagType:'', sold:'45,000+', rating:4.7, link:'jumbo+pop+bubble+pad+fidget+sensory',
+    desc:'Large silicone bubble pad — satisfying pop on every press, resets for infinite re-popping. Quiet and addictive.',
+    features:['100 bubbles per side','Resets after popping','Food-grade silicone','Wipe-clean surface'] },
+
+  { id:34, vid:47320957091971, cat:'sensory', name:'Squeeze Stress Relief Ball',    price:2.99,  img:'', tag:'BESTSELLER', tagType:'hot', sold:'62,000+', rating:4.8, link:'squeeze+stress+relief+ball+fidget',
+    desc:'The OG stress reliever. Slow-rebound foam core inside a stretchy mesh skin — squeeze it, watch it ooze through the gaps.',
+    features:['Slow-rebound foam','Stretchy mesh skin','Hand-strengthening','Washable cover'] },
+
+  { id:35, vid:47320957419651, cat:'sensory', name:'Mesh Marble Fidget Ball',       price:2.49,  img:'', tag:'VALUE', tagType:'', sold:'38,000+', rating:4.6, link:'mesh+marble+fidget+ball+sensory',
+    desc:'Push the marble through the stretchy mesh in any direction. One of the most satisfying textures in the lineup.',
+    features:['Stretch mesh exterior','Marble core','Tactile + visual','Pocket size'] },
+
+  { id:36, vid:47320957452419, cat:'sensory', name:'Stretchy Squishy Worm',         price:4.99,  img:'', tag:'', tagType:'', sold:'14,000+', rating:4.5, link:'stretchy+squishy+worm+fidget+sensory+toy',
+    desc:'Ultra-stretchy silicone worm — pull it, twist it, knot it. Great sensory input for ADHD and anxiety.',
+    features:['300% stretch silicone','Twist-proof cord','Tactile ridged texture','Soft safe material'] },
+
+  { id:37, vid:47320957649027, cat:'sensory', name:'Silicone Sensory Fidget Pad',   price:5.49,  img:'', tag:'HOT', tagType:'hot', sold:'9,200+', rating:4.7, link:'silicone+sensory+fidget+pad+ADHD',
+    desc:'12 different sensory zones in one pad — bumps, ridges, switches and spinners. A fidget board in your palm.',
+    features:['12 sensory zones','Compact palm size','BPA-free silicone','Designed for ADHD'] },
+
+  { id:38, vid:47320959713411, cat:'sensory', name:'Pinch-Pop Sensory Strip',       price:3.99,  img:'', tag:'', tagType:'', sold:'11,600+', rating:4.6, link:'pinch+pop+sensory+strip+fidget',
+    desc:'A strip of bubble chambers you pinch one at a time. Quieter than standard pop-its, more deliberate, deeply satisfying.',
+    features:['Sequential pop design','Near-silent use','Flexible silicone','Clips to bag or belt'] },
+
+  { id:39, vid:47320962039939, cat:'sensory', name:'Thumb Smooth Worry Stone',      price:2.99,  img:'', tag:'VALUE', tagType:'', sold:'29,000+', rating:4.6, link:'thumb+smooth+worry+stone+anxiety+relief',
+    desc:'Polished natural gemstone with a thumb-shaped groove. Ancient anxiety relief — rub it and breathe. Works every time.',
+    features:['Natural gemstone','Thumb-contoured groove','Grounding practice aid','Carry pouch included'] },
+
+  { id:40, vid:47320962990211, cat:'sensory', name:'Kinetic Sand Zen Desk Set',     price:10.99, img:'', tag:'HOT', tagType:'hot', sold:'7,800+', rating:4.8, link:'kinetic+sand+zen+desk+set+fidget',
+    desc:'500g of kinetic sand in a lidded tray with a mini rake and roller. Build, flatten, zen out. Zero mess.',
+    features:['500g kinetic sand','Mini zen tools included','Sealed tray no mess','Blue or beige options'] },
+
+  { id:41, vid:47320963317891, cat:'sensory', name:'Liquid Motion Bubbler Timer',   price:12.99, img:'', tag:'CALMING', tagType:'', sold:'5,400+', rating:4.7, link:'liquid+motion+bubbler+timer+sensory',
+    desc:'Coloured oil and water cascade through chambers in a hypnotic waterfall loop. Watch the stress dissolve with it.',
+    features:['Dual-layer cascade','Mesmerising slow-flow','Desk or handheld use','Replaceable liquid'] },
+
+  { id:42, vid:47320963350659, cat:'sensory', name:'Pop-It Keychain Clip',          price:2.49,  img:'', tag:'VALUE', tagType:'', sold:'55,000+', rating:4.6, link:'pop+it+keychain+clip+fidget+mini',
+    desc:'Miniature pop-it on a carabiner clip — attach it to your bag, keys or belt loop and pop it anywhere.',
+    features:['Carabiner clip','15 bubbles per side','Reusable silicone','20+ colour options'] },
+
+  { id:43, vid:47320963383427, cat:'sensory', name:'Stretchy Rainbow Noodle Pack',  price:3.99,  img:'', tag:'', tagType:'', sold:'18,000+', rating:4.5, link:'stretchy+rainbow+noodle+fidget+sensory',
+    desc:'Pack of 5 stretchy silicone noodles in vivid colours. Pull, twist, weave — great for fine-motor fidgeting.',
+    features:['5 noodles per pack','Ultra-stretch silicone','Safe non-toxic','Ages 4 and up'] },
+
+  { id:44, vid:47320963416195, cat:'sensory', name:'Giant Pop-It Rainbow Board',    price:5.99,  img:'', tag:'HOT', tagType:'hot', sold:'21,000+', rating:4.7, link:'giant+pop+it+rainbow+board+fidget',
+    desc:'A3-size rainbow pop-it board — 200+ bubbles of pure satisfaction. Great shared fidget for desks and classrooms.',
+    features:['200+ bubbles','A3 board size','Rainbow colour layout','Thick food-grade silicone'] },
+
+  // ── EDC ────────────────────────────────────────────────────────────────────
+
+  { id:45, vid:47320963448963, cat:'edc', name:'Click Pen Satisfying Fidget',       price:9.99,  img:'', tag:'HOT', tagType:'hot', sold:'13,200+', rating:4.7, link:'click+pen+satisfying+fidget+EDC',
+    desc:'A ballpoint pen with an ultra-satisfying tri-click mechanism. Actually writes — and clicking it might be better.',
+    features:['Tri-stage click action','Working ballpoint pen','Brushed aluminium body','Click force adjustable'] },
+
+  { id:46, vid:47320963481731, cat:'edc', name:'Slider Fidget Bar Pro',             price:14.99, img:'', tag:'NEW', tagType:'dark', sold:'4,600+', rating:4.8, link:'slider+fidget+bar+pro+EDC+metal',
+    desc:'A satisfying linear slider on a stainless bar. Single thumb operation — slide it, magnetic end-stop snaps it back.',
+    features:['Linear slider mechanism','Magnetic end-stop snap','316L stainless steel','EDC pocket clip'] },
+
+  { id:47, vid:47320963514499, cat:'edc', name:'Dual-Button EDC Clicker',           price:19.99, img:'', tag:'PREMIUM', tagType:'dark', sold:'2,800+', rating:4.8, link:'dual+button+EDC+clicker+fidget+metal',
+    desc:'Two independent click buttons on a machined aluminium body. Left thumb, right thumb — find your rhythm.',
+    features:['Dual independent buttons','CNC aluminium body','Adjustable click tension','Titanium finish option'] },
+
+  { id:48, vid:47320963547267, cat:'edc', name:'Spinning Flip Coin',                price:6.99,  img:'', tag:'', tagType:'', sold:'16,400+', rating:4.6, link:'spinning+flip+coin+fidget+EDC+trick',
+    desc:'Weighted coin designed for rolling across knuckles, spinning on a finger, and flipping tricks. Master it fast.',
+    features:['28mm weighted coin','Knuckle-roll ready','Polished steel edge','Trick guide included'] },
+
+  { id:49, vid:47320963580035, cat:'edc', name:'Worry Stone Thumb Press',           price:5.49,  img:'', tag:'VALUE', tagType:'', sold:'22,000+', rating:4.6, link:'worry+stone+thumb+press+anxiety+EDC',
+    desc:'Smooth agate worry stone, sized for your thumb. Grounding, calming, always in your pocket.',
+    features:['Natural agate stone','Thumb-contoured hollow','Polished smooth surface','Pouch included'] },
+
+  { id:50, vid:47320963612803, cat:'edc', name:"Desktop Newton's Cradle",           price:13.99, img:'', tag:'CLASSIC', tagType:'', sold:'8,200+', rating:4.7, link:'desktop+newtons+cradle+fidget+desk+toy',
+    desc:'Five steel ball bearings on a chrome frame. Click-clack your way through meetings, calls and creative blocks.',
+    features:['5 polished steel balls','Chrome frame stand','Adjustable string tension','Compact 14cm size'] },
+
+  { id:51, vid:47320963645571, cat:'edc', name:'Magnetic Orbit Desktop Toy',        price:21.99, img:'', tag:'NEW', tagType:'dark', sold:'2,400+', rating:4.8, link:'magnetic+orbit+desktop+fidget+toy',
+    desc:'A chrome orb that levitates and orbits a central magnet ring. Meditative to watch, impossible to ignore.',
+    features:['Magnetic levitation orbit','Chrome steel orb','Adjustable field ring','Silent operation'] },
+
+  { id:52, vid:47320963678339, cat:'edc', name:'Gyroscope Hand Toy Pro',            price:16.99, img:'', tag:'', tagType:'', sold:'5,200+', rating:4.7, link:'gyroscope+hand+toy+pro+fidget',
+    desc:'A gyroscope that powers up with a pull cord and resists every tilt. Wrist-strengthening, mind-bending.',
+    features:['Self-powered gyroscope','Wrist + grip training','Transparent case','LED model available'] },
+
+  { id:53, vid:47320963711107, cat:'edc', name:'Flip Gear Anti-Stress Toy',         price:10.99, img:'', tag:'', tagType:'', sold:'6,800+', rating:4.6, link:'flip+gear+anti+stress+fidget+toy+EDC',
+    desc:'Two toothed gears that mesh and flip around a central axis. Fidget with both hands simultaneously for max focus.',
+    features:['Meshing dual gears','Two-hand engagement','Compact folded size','Durable ABS + steel'] },
+
+  { id:54, vid:47320964038787, cat:'edc', name:'Titanium Bead Chain Fidget',        price:29.99, img:'', tag:'PREMIUM', tagType:'dark', sold:'1,600+', rating:4.9, link:'titanium+bead+chain+fidget+EDC+premium',
+    desc:'Grade-5 titanium beads on a ball chain — flick, roll, rattle. Compact EDC that never leaves your pocket.',
+    features:['Grade-5 titanium beads','Ball chain design','100g satisfying weight','Lifetime durability'] },
+
+  // ── BUNDLES ────────────────────────────────────────────────────────────────
+
+  { id:55, vid:47320964694147, cat:'bundle', name:'Spinner Starter Kit (3-Pack)',   price:21.99, img:'', tag:'DEAL', tagType:'', sold:'6,200+', rating:4.8, link:'fidget+spinner+starter+kit+3+pack',
+    desc:'Three of our most popular spinners — metal tri-blade, carbon fiber, and mini pocket — in one discounted kit.',
+    features:['3 spinners included','Metal + carbon + mini','Save vs buying separate','Gift-ready packaging'] },
+
+  { id:56, vid:47320964726915, cat:'bundle', name:'Sensory Relief Bundle (8-Piece)', price:27.99, img:'', tag:'HOT', tagType:'hot', sold:'4,800+', rating:4.8, link:'sensory+relief+bundle+8+piece+fidget',
+    desc:'8 different sensory toys — stress ball, pop-it, mesh marble, worry stone and more. Great for ADHD/anxiety toolkits.',
+    features:['8 unique fidgets','Covers tactile, visual, audio','Reusable carry bag','Therapist recommended'] },
+
+  { id:57, vid:47320965054595, cat:'bundle', name:'Cube & Ring Combo Pack',         price:19.99, img:'', tag:'', tagType:'', sold:'5,400+', rating:4.7, link:'cube+ring+combo+pack+fidget',
+    desc:'Best-selling 6-side fidget cube + magnetic rings 5-pack. Two completely different fidget experiences in one bundle.',
+    features:['Fidget cube + 5 rings','Two distinct sensations','Reusable zip bag','Great starter combo'] },
+
+  { id:58, vid:47320965120131, cat:'bundle', name:'EDC Pocket Fidget Kit',          price:32.99, img:'', tag:'PREMIUM', tagType:'dark', sold:'2,200+', rating:4.8, link:'EDC+pocket+fidget+kit+premium',
+    desc:'Four premium EDC fidgets — click pen, slider bar, flip coin and worry stone — all in a compact leather roll.',
+    features:['4 EDC fidgets','Leather carry roll','Ready to gift','Compact daily rotation'] },
+
+  { id:59, vid:47320965513347, cat:'bundle', name:'Ultimate Stress Kit (12-Piece)', price:49.99, img:'', tag:'MEGA DEAL', tagType:'', sold:'3,600+', rating:4.9, link:'ultimate+stress+relief+kit+12+piece',
+    desc:'12 of our best sellers across every category. Spinners, cubes, rings, sensory and EDC — the complete collection.',
+    features:['12 premium fidgets','All 5 categories','Full-size carry case','Best value in the store'] },
+
+  { id:60, vid:47320965677187, cat:'bundle', name:'Kids Sensory Pack (6-Piece)',    price:16.99, img:'', tag:'KIDS', tagType:'', sold:'7,400+', rating:4.7, link:'kids+sensory+fidget+pack+6+piece',
+    desc:'6 child-safe, BPA-free sensory toys designed for classroom, therapy and home. Supports focus and self-regulation.',
+    features:['BPA-free certified','Ages 4+','6 sensory types','Mesh storage bag'] },
+
+  { id:61, vid:47320965709955, cat:'bundle', name:'Anti-Anxiety Mega Bundle (15-Piece)', price:59.99, img:'', tag:'BESTSELLER', tagType:'hot', sold:'2,800+', rating:4.9, link:'anti+anxiety+mega+bundle+15+piece+fidget',
+    desc:'The ultimate stress-relief toolkit. 15 fidgets spanning every modality — tactile, visual, motion and grounding.',
+    features:['15 fidgets included','Therapist-curated','All categories covered','Premium hard-shell case'] },
+
 ];
