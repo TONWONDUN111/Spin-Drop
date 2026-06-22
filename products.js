@@ -440,4 +440,43 @@ const PRODUCTS = [
     desc:'Premium liquid sand hourglass with slow-flowing coloured sand — flip it, watch it, reset your mind.',
     features:['3-min flow time','Coloured liquid sand','Acrylic + metal frame','Focus and calm tool'] },
 
+
+  // ── BUDGET SPINNERS ────────────────────────────────────────────────────────
+
+  { id:70, vid:47327106760835, cat:'spinner', name:'Classic Tri-Blade Starter Spinner', price:1.99,
+    img:'https://cdn.shopify.com/s/files/1/0728/2684/7363/files/S21eff922c13f4222a75da04f63b96ff88.jpg_480x480q75_f73ba83e-4f90-4c04-9c80-ec80aab6cb21.webp?v=1782024126',
+    tag:'$1.99', tagType:'hot', sold:'New', rating:4.5, link:'basic+plastic+tri+blade+fidget+spinner+cheap',
+    desc:'The no-frills spinner that started it all. Basic plastic tri-blade with a smooth bearing — ideal first fidget or bulk gift.',
+    features:['Classic tri-blade design','Smooth steel bearing','Lightweight plastic body','Perfect starter spinner'] },
+
+  { id:71, vid:47327107645571, cat:'spinner', name:'Mini Rainbow Budget Spinner',     price:2.49,
+    img:'https://cdn.shopify.com/s/files/1/0728/2684/7363/files/S24af9d0e5bab4c7892b746e9ea0a3fd5t.jpg_480x480q75_6a8940e8-b986-4455-b7d6-0a17907f2fa3.webp?v=1782024126',
+    tag:'$2.49', tagType:'hot', sold:'New', rating:4.5, link:'mini+rainbow+budget+fidget+spinner',
+    desc:'Tiny rainbow-coated spinner with a satisfying flip. A fun impulse buy that actually spins well for the price.',
+    features:['Rainbow chrome finish','Compact pocket size','Smooth bearing','Great party favour or gift'] },
+
+  { id:72, vid:47327107711107, cat:'spinner', name:'Glow Starter Spinner',            price:2.49,
+    img:'https://cdn.shopify.com/s/files/1/0728/2684/7363/files/S9db84612316e40d788280e3ba99bc50fP.jpg_480x480q75_5ebea618-d55b-42b2-b36f-fe557dc0af50.webp?v=1782024128',
+    tag:'$2.49', tagType:'hot', sold:'New', rating:4.5, link:'glow+dark+budget+fidget+spinner+cheap',
+    desc:'Budget glow-in-the-dark spinner — charge it up under any light and it glows. Wildly satisfying for the price.',
+    features:['Glow-in-dark phosphor body','Basic ceramic bearing','Great for kids','No batteries needed'] },
+
+  { id:73, vid:47327107743875, cat:'spinner', name:'Value Metal Spinner',             price:2.99,
+    img:'https://cdn.shopify.com/s/files/1/0728/2684/7363/files/S260c31afc65d40668bd3d46090203895f.jpg_480x480q75_42cee9e5-dec1-4ca3-b426-244bd51b10a3.webp?v=1782024125',
+    tag:'VALUE', tagType:'', sold:'New', rating:4.6, link:'cheap+metal+fidget+spinner+value',
+    desc:'Solid metal body, proper bearing, unbeatable price. The best value metal spinner in the catalog.',
+    features:['Metal alloy body','R188 steel bearing','Better than plastic','Great daily carry'] },
+
+  { id:74, vid:47327108169859, cat:'bundle', name:'Budget Spinner 5-Pack',            price:7.99,
+    img:'https://cdn.shopify.com/s/files/1/0728/2684/7363/files/Sf005676a6b5e4a5e801587c99ad3c0cal.jpg_480x480q75_44572573-2073-4ccd-97f5-95a921b8fd6c.webp?v=1782024152',
+    tag:'DEAL', tagType:'', sold:'New', rating:4.6, link:'budget+spinner+5+pack+bulk+cheap',
+    desc:'Five basic spinners in mixed colours for the price of one mid-range. Perfect for classrooms, party bags, or stocking up.',
+    features:['5 spinners included','Mixed colours','Smooth steel bearings','Bulk value pricing'] },
+
+  { id:75, vid:47327108432003, cat:'spinner', name:'Custom Logo Fidget Spinner',      price:24.99,
+    img:'https://cdn.shopify.com/s/files/1/0728/2684/7363/files/S47d27b844d714f77b6397d4a396ad47dg.jpg_480x480q75_ad80f9a4-47ce-42de-97be-f7751c9c70ac.webp?v=1782024127',
+    tag:'CUSTOM', tagType:'dark', sold:'New', rating:4.9, link:'custom+logo+fidget+spinner+engraved+branded',
+    desc:'Your brand laser-engraved or full-colour printed on a premium metal spinner. Perfect for corporate gifts, events and merch.',
+    features:['Upload PDF, SVG, PNG, AI, EPS','Laser engraved or colour print','Min. 10 units','Ships in 15–20 days'] },
+
 ];
