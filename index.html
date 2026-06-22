@@ -607,7 +607,7 @@ function renderProducts() {
   grid.innerHTML = filtered.map(p => {
     const meta     = CAT_META[p.cat] || CAT_META.spinner;
     const tagClass = p.tagType === 'hot' ? 'card-tag hot' : p.tagType === 'dark' ? 'card-tag dark' : 'card-tag';
-    const soldLine = (p.sold && p.sold !== 'New') ? `<span class="sold-badge">${p.sold} sold${p.rating ? ' · ' + p.rating + '★' : ''}</span>` : '';
+    const soldLine = '';
     const nameHtml = p.name.replace(/(\b\w+\b)$/, '<span class="k">$1</span>');
     return `
     <a class="card" href="product.html?id=${p.id}">

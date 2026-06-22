@@ -15,7 +15,7 @@
   .blob-bl { position:fixed; bottom:-100px; left:-100px; width:480px; height:480px; background:radial-gradient(circle,rgba(150,220,255,.18) 0%,transparent 65%); pointer-events:none; z-index:0; }
 
   /* NAV */
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:16px 52px; background:rgba(255,255,255,.94); backdrop-filter:blur(16px); border-bottom:1px solid rgba(0,0,0,.07); }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:16px 52px; background:rgba(255,255,255,.94); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); border-bottom:1px solid rgba(0,0,0,.07); }
   .logo { font-size:20px; font-weight:900; letter-spacing:-.04em; color:var(--dark); text-decoration:none; display:flex; align-items:center; gap:8px; }
   .logo .drop { color:var(--gold); text-shadow:0 0 16px rgba(124,58,237,.5); }
   .nav-right { display:flex; align-items:center; gap:20px; }
@@ -27,7 +27,7 @@
 
   /* BREADCRUMB */
   .breadcrumb { padding:100px 52px 0; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
-  .breadcrumb nav { position:static; background:none; backdrop-filter:none; border:none; padding:0; justify-content:flex-start; gap:8px; }
+  .breadcrumb nav { position:static; background:none; -webkit-backdrop-filter:none; backdrop-filter:none; border:none; padding:0; justify-content:flex-start; gap:8px; }
   .breadcrumb a { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--gray); text-decoration:none; transition:color .2s; }
   .breadcrumb a:hover { color:var(--dark); }
   .breadcrumb span { font-size:12px; color:var(--gray); }
@@ -308,16 +308,13 @@ const specsHtml = p.specs
     </div>`
   : '';
 
-const ratingHtml = p.rating
-  ? `<div class="stars">${renderStars(p.rating)}</div><div class="proof-divider"></div><span class="proof-text">${p.rating}★ · ${p.sold} sold</span>`
-  : `<span class="proof-text">${p.sold !== 'New' ? p.sold + ' sold' : 'New arrival'}</span>`;
+const ratingHtml = '';
 
 document.getElementById('product-wrap').innerHTML = `
   <div class="product-gallery">
     <div class="main-image">
       <img id="main-img" src="${allImgs[0]}" alt="${p.name}" onerror="this.style.display='none'"/>
       <span class="img-badge ${tagClass}">${p.tag}</span>
-      ${p.link ? '<span class="supplier-flag" title="Supplier mapped">🇺🇸</span>' : ''}
     </div>
     ${thumbsHtml}
     <div class="delivery-strip">
@@ -329,7 +326,7 @@ document.getElementById('product-wrap').innerHTML = `
   <div class="product-info">
     <span class="cat-badge">${p.cat}</span>
     <h1 class="product-name">${nameHtml}</h1>
-    <div class="social-proof">${ratingHtml}</div>
+    ${ratingHtml}
     <div class="price-row">
       <span class="price-main">$${p.price.toFixed(2)}</span>
       <span class="price-note">Free U.S. shipping</span>
@@ -375,7 +372,6 @@ document.getElementById('related-grid').innerHTML = related.map(r => {
     <div class="card-img">
       <img src="${CDN}${r.img}" alt="${r.name}" loading="lazy" onerror="this.style.display='none'"/>
       <span class="card-tag ${tc}">${r.tag}</span>
-      ${r.link ? '<span class="supplier-badge" title="Supplier mapped">🇺🇸</span>' : ''}
     </div>
     <div class="card-body">
       <div class="card-name">${r.name}</div>
