@@ -610,7 +610,7 @@ function renderProducts() {
     const soldLine = (p.sold && p.sold !== 'New') ? `<span class="sold-badge">${p.sold} sold${p.rating ? ' · ' + p.rating + '★' : ''}</span>` : '';
     const nameHtml = p.name.replace(/(\b\w+\b)$/, '<span class="k">$1</span>');
     return `
-    <div class="card">
+    <a class="card" href="product.html?id=${p.id}">
       <div class="card-img" style="background:${meta.bg}">
         <span class="card-emoji">${meta.emoji}</span>
         ${p.img ? `<img src="${CDN}${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'"/>` : ''}
@@ -620,10 +620,10 @@ function renderProducts() {
         <div class="card-name">${nameHtml}</div>
         <div class="card-foot">
           <div>${soldLine}<span class="card-price">$${p.price.toFixed(2)}</span></div>
-          <button type="button" class="btn-buy" onclick="addToCart(${p.id})">Add to Cart</button>
+          <button type="button" class="btn-buy" onclick="event.preventDefault();addToCart(${p.id})">Add to Cart</button>
         </div>
       </div>
-    </div>`;
+    </a>`;
   }).join('');
 }
 
