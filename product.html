@@ -272,8 +272,7 @@ function renderStars(rating) {
 // ── Main render ───────────────────────────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
 const id = parseInt(params.get('id') || '0', 10);
-const MAPPED_PRODUCTS = PRODUCTS.filter(x => x.link && String(x.link).trim());
-const p  = MAPPED_PRODUCTS.find(x => x.id === id) || MAPPED_PRODUCTS[0] || PRODUCTS[0];
+const p = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
 
 // Breadcrumb
 document.getElementById('bc-cat').textContent  = p.cat.charAt(0).toUpperCase() + p.cat.slice(1);
@@ -364,7 +363,7 @@ document.getElementById('product-wrap').innerHTML = `
   </div>`;
 
 // ── Related products ──────────────────────────────────────────────────────────
-const related = MAPPED_PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 4);
+const related = PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 4);
 document.getElementById('related-grid').innerHTML = related.map(r => {
   const tc = r.tagType === 'hot' ? 'hot' : r.tagType === 'dark' ? 'dark' : '';
   return `
