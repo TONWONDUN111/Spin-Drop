@@ -10,7 +10,7 @@
     # Don't leak full URLs to other sites in the Referer header.
     Referrer-Policy = "strict-origin-when-cross-origin"
     # Turn off device APIs the site doesn't use.
-    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
     # Force HTTPS for a year (Netlify already serves HTTPS).
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     # Only allow content from your own site, plus Google Fonts.
