@@ -229,7 +229,7 @@ ttq.page();
 <div class="toast" id="toast"></div>
 
 <footer>
-  © 2026 Spin Drop &nbsp;·&nbsp; Fast shipping &nbsp;·&nbsp; Free tracking on every order
+  © 2026 Spin Drop &nbsp;·&nbsp; $2.99 flat-rate shipping &nbsp;·&nbsp; Tracking on every order
 </footer>
 
 <script src="products.js"></script>
@@ -317,7 +317,7 @@ function render() {
   countEl.textContent = itemCount + ' item' + (itemCount !== 1 ? 's' : '');
 
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const shipping = 0;
+  const shipping = 2.99;
   const total = subtotal + shipping;
 
   const itemsHtml = cart.map(item => {
@@ -349,7 +349,7 @@ function render() {
     <div class="order-summary">
       <div class="summary-title">Order Summary</div>
       <div class="summary-line"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
-      <div class="summary-line"><span>Shipping</span><span class="free-ship">FREE</span></div>
+      <div class="summary-line"><span>Shipping</span><span>$2.99</span></div>
       <div class="summary-line"><span>Delivery</span><span>Fast shipping</span></div>
       <div class="summary-line total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
       <button class="btn-checkout" onclick="checkout()">Checkout →</button>
