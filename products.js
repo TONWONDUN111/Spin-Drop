@@ -4,7 +4,7 @@
 
 const CDN = '';
 const CART_KEY = 'spindrop-cart';
-const SHOP_DOMAIN = 'https://spinaging.myshopify.com';
+const SHOP_DOMAIN = 'https://e7kmhz-fs.myshopify.com';
 
 const PRODUCTS = [
   // ── SPINNERS ──────────────────────────────────────────────────────────────
